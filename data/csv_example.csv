@@ -1,0 +1,5 @@
+"name","age","gender","killed"
+"Morpheus",38,"male",False
+"Neo",35,"male",False
+"Cipher",48,"male",True
+"Trinity",32,"female",False
