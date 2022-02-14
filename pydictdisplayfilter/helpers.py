@@ -92,7 +92,7 @@ class DictTable:
         return os.linesep.join(self._make_table(result) + self._make_footer(result, duration))
 
 
-class DisplayFilterShell(cmd.Cmd):
+class DictDisplayFilterShell(cmd.Cmd):
     """ A little shell for the display filter. """
 
     intro = 'Type help or ? to list commands.\n'

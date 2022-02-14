@@ -21,7 +21,7 @@ import os.path
 import sys
 import traceback
 
-from pydictdisplayfilter.helpers import DisplayFilterShell
+from pydictdisplayfilter.helpers import DictDisplayFilterShell
 
 
 def read_csv_file(csv_file):
@@ -50,7 +50,7 @@ if __name__ == '__main__':
 
     try:
         data_store = read_csv_file(csv_file)
-        DisplayFilterShell(data_store).cmdloop()
+        DictDisplayFilterShell(data_store).cmdloop()
     except Exception as err:
         logger.error(str(err))
         traceback.print_exc()

@@ -22,7 +22,7 @@ import traceback
 from collections import defaultdict
 from typing import List, Dict
 
-from pydictdisplayfilter.helpers import DisplayFilterShell
+from pydictdisplayfilter.helpers import DictDisplayFilterShell
 
 try:
     from libnmap.objects import NmapHost
@@ -88,7 +88,7 @@ if __name__ == '__main__':
 
     try:
         data_store = NmapXMLParser().parse(nmap_xml_file)
-        DisplayFilterShell(data_store).cmdloop()
+        DictDisplayFilterShell(data_store).cmdloop()
     except Exception as err:
         logger.error(str(err))
         traceback.print_exc()
