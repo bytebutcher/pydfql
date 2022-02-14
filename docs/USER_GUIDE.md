@@ -33,7 +33,6 @@ A complete list of available comparison operators is shown in the following tabl
 | contains | ~=      | field contains a value                               | age contains 3  |
 | matches  | ~       | field matches a Perl-compatible regular expression   | name matches 3  |
 |          | &       | Bitwise AND is non-zero                              | age & 0x20      | 
-|----------|---------|------------------------------------------------------|-----------------|
 
 ## Display Filter Field Types
 
@@ -137,7 +136,6 @@ Expressions can be combined using the following logical operators:
 | or        | &#124;&#124; | Logical OR  | ```name == Neo or name == Trinity```    |
 | xor       | ^^           | Logical XOR | ```gender == female xor power```        |
 | not       | !            | Logical NOT | ```gender == male and not (age > 35)``` |
-| --------- | -----------  |-------------| --------------------------------------- |
 
 ## Slice Operator
 
@@ -232,4 +230,3 @@ The display filter language has a number of functions to convert fields:
 | upper     | Converts a string field to uppercase. | ```upper(name) == NEO``` | 
 | lower     | Converts a string field to lowercase. | ```lower(name) == neo``` |
 | len       | Returns the length of a string.       | ```len(name) == 3```     |
-|-----------|---------------------------------------|--------------------------|
