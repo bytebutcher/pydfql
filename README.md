@@ -1,4 +1,3 @@
-
 <p align="center">
     <img src="https://github.com/bytebutcher/python-dict-display-filter/raw/main/images/python_dict_display_filter_logo.png" alt="python_dict_display_filter Logo"/>
 </p>
@@ -8,7 +7,6 @@
 ![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)
 ![PyPI](https://img.shields.io/pypi/v/python-dict-display-filter)
 ![GitHub](https://img.shields.io/github/license/bytebutcher/python-dict-display-filter)
-
 </div>
 <br>
 
@@ -22,14 +20,14 @@ pip3 install python-dict-display-filter
 ## Usage
 
 The basics and the syntax of the display filter are described in the 
-<a href="https://github.com/bytebutcher/python-dict-display-filter/raw/main/docs/USER_GUIDE.md">User Guide</a>.
+<a href="https://github.com/bytebutcher/python-dict-display-filter/blob/main/docs/USER_GUIDE.md">User Guide</a>.
 
 If you want to see some advanced examples of how ```python-dict-display-filter``` can be put to use checkout the 
-<a href="https://github.com/bytebutcher/python-dict-display-filter/raw/main/docs/EXAMPLES.md">Examples</a>.
+<a href="https://github.com/bytebutcher/python-dict-display-filter/blob/main/docs/EXAMPLES.md">Examples</a>.
 
 If you want to use ```python-dict-display-filter``` in your own application and customize it to your needs 
 check out the 
-<a href="https://github.com/bytebutcher/python-dict-display-filter/raw/main/docs/DEVELOPER_GUIDE.md">Developer Guide</a>.
+<a href="https://github.com/bytebutcher/python-dict-display-filter/blob/main/docs/DEVELOPER_GUIDE.md">Developer Guide</a>.
 
 ## Examples 
 
