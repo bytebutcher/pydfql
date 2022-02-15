@@ -35,7 +35,7 @@ See <a href="https://github.com/bytebutcher/python-dict-display-filter/raw/main/
 
 This example shows how easy it is to create a display filter for nmap-xml-files:
 ```commandline
-python3 examples/nmap_display_filter.py -iC data/nmap_example.xml
+python3 examples/nmap_display_filter.py data/nmap_example.xml
 # Enter ?help for a list of commands.
 ```
 ```
