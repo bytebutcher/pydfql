@@ -1,11 +1,11 @@
 <p align="center">
     <img src="https://github.com/bytebutcher/python-dict-display-filter/raw/main/images/python_dict_display_filter_logo.png" alt="python_dict_display_filter Logo"/>
 </p>
-<p align="center"><font size="5">Python Dictionary Display Filter</font></p>
-<p align="center"><font size="5">Examples</font></p>
+<h1 align="center" style="margin-top: 0px;">Python Dictionary Display Filter</h1>
+<h1 align="center" style="margin-top: 0px;">Examples</h1>
 <br>
 
-### CSV Display Filter
+## CSV Display Filter
 
 This example shows how easy it is to create a display filter for CSV-files:
 ```commandline
@@ -31,7 +31,7 @@ Neo  | 35  | male   | False
 
 See <a href="https://github.com/bytebutcher/python-dict-display-filter/raw/main/examples/csv_display_filter.py">examples/csv_display_filter.py</a> for the actual source code.
 
-### Nmap Display Filter
+## Nmap Display Filter
 
 This example shows how easy it is to create a display filter for nmap-xml-files:
 ```commandline

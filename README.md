@@ -1,7 +1,7 @@
 <p align="center">
     <img src="https://github.com/bytebutcher/python-dict-display-filter/raw/main/images/python_dict_display_filter_logo.png" alt="python_dict_display_filter Logo"/>
 </p>
-<p align="center"><font size="5">Python Dictionary Display Filter</font></p>
+<h1 align="center" style="margin-top: 0px;">Python Dictionary Display Filter</h1>
 <div align="center">
 
 ![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)
