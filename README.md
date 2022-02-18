@@ -29,9 +29,21 @@ If you want to use ```python-dict-display-filter``` in your own application and 
 check out the 
 <a href="https://github.com/bytebutcher/python-dict-display-filter/blob/main/docs/DEVELOPER_GUIDE.md">Developer Guide</a>.
 
+## Features
+The following overview shows all the supported features of the display filter:
+* **Comparison Operators:** ```==```, ```!=```, ```<=```, ```<```, ```>=```, ```>```, ```~=```, ```~```, ```&```
+* **Combining Operators:** ```and```, ```or```, ```xor```, ```not``` 
+* **Membership Operators:** ```in```
+* **Types:** ```Text```, ```Number```, ```Date & Time```, ```Ethernet-```, ```IPv4-```, ```IPv6-Address```
+* **Slicing:** ```Text```, ```Ethernet-```, ```IPv4-```, ```IPv6-Address```
+* **Functions:** ```upper```, ```lower```, ```len```
+
+For a detailed description of the individual features check out the
+<a href="https://github.com/bytebutcher/python-dict-display-filter/blob/main/docs/USER_GUIDE.md">User Guide</a>.
+
 ## Examples 
 
-Initialize ```DictDisplayFilter``` with a dictionary:
+Initialize ```DictDisplayFilter``` with a list of dictionaries:
 ```
 > from pydictdisplayfilter import DictDisplayFilter
 > actors = [
