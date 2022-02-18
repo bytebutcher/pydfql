@@ -84,3 +84,14 @@ Show all actors which name matches a regular expression:
 ```
 > ddf.filter("name matches .*e$")
 ```
+
+## Inspired by
+
+* <a href="https://wiki.wireshark.org/DisplayFilters">Wireshark Display Filter</a>
+
+## Powered by
+
+* <a href="https://github.com/wolever/parameterized">parameterized</a>: Parameterized testing with any Python test framework
+* <a href="https://github.com/pyparsing/pyparsing/">pyparsing</a>: Creating PEG-parsers made easy
+* <a href="https://github.com/bytebutcher/ipranger/">ipranger</a>: Parsing and matching IPv4-addresses
+* <a href="https://pypi.org/project/python-dateutil/">python-dateutil</a>: Parsing and comparing dates 
