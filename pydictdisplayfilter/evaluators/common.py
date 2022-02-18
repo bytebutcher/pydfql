@@ -30,6 +30,10 @@ class BasicEvaluator:
     A basic evaluator which is ment to be used as base class for other evaluators and is quite useless on its own.
     """
 
+    def __init__(self):
+        """ Initializes the BasicEvaluator. """
+        self._logger = logging.getLogger()
+
     def _convert_expression_value(self, value: Optional[Union[int, str]]) -> Optional[Any]:
         """
         Converts a given value as defined in the expression to a more useful representation.
@@ -74,21 +78,21 @@ class BasicEvaluator:
         Evaluates the expression- and item-value.
         :param expression_value: a given untransformed value from the expression.
         :param item_value: a given untransformed value from the datastore.
-        :return: True, when the item-value matches the expression.
+        :return: True, when the item-value matches the expression, otherwise False.
         """
         try:
             evaluate = self._evaluate(
                 self._convert_expression_value(expression_value),
                 self._convert_item_value(item_value)
             )
-            #print(self.__class__.__name__ + ": '{}' {} '{}' = {}".format(
-            #    expression_value, operator, item_value, evaluate
-            #))
+            self._logger.debug(self.__class__.__name__ + ": '{}' {} '{}' = {}".format(
+                expression_value, operator, item_value, evaluate
+            ))
             return evaluate
         except:
-            #print(self.__class__.__name__ + ": '{}' {} '{}' = {}".format(
-            #    expression_value, operator, item_value, False
-            #))
+            self._logger.debug(self.__class__.__name__ + ": '{}' {} '{}' = {}".format(
+                expression_value, operator, item_value, False
+            ))
             return False or operator == '!='
 
 
@@ -100,6 +104,7 @@ class CallbackEvaluator(BasicEvaluator):
         Initializes the CallbackEvaluator with a callback.
         :param callback: a callback which expects two arguments and returns True or False.
         """
+        super().__init__()
         self._callback = callback
 
     def _evaluate(self, expression_value: Any, item_value: Any) -> bool:
@@ -134,20 +139,25 @@ class ListEvaluator(BasicEvaluator):
         :return: True, when item value is found in the given expression value list.
         """
         def _evaluate_list_item(ev, item_value):
-            if isinstance(ev, List):
-                if '..' in ev or '-' in ev:
-                    l, _, r = ev
-                    return float(l) <= float(item_value) <= float(r)
+            try:
+                if isinstance(ev, List):
+                    if '..' in ev or '-' in ev:
+                        # In this case we expect two floats and the item value should be inbetween.
+                        # May fail when values can not be converted to float.
+                        l, _, r = ev
+                        return float(l) <= float(item_value) <= float(r)
+                    else:
+                        return any(_evaluate_list_item(v, item_value) for v in ev)
                 else:
-                    return any(_evaluate_list_item(v, item_value) for v in ev)
-            else:
-                try:
-                    return float(item_value) == float(ev)
-                except:
                     try:
-                        return item_value == ev
+                        return float(item_value) == float(ev)
                     except:
-                        return False
+                        # There was an error during converting the values to float.
+                        # Try direct comparison instead. May fail when types vary and can not be compared.
+                        return item_value == ev
+            except:
+                # There was an error during evaluating the list item.
+                return False
         return any(_evaluate_list_item(ev, item_value) for ev in expression_value)
 
 
