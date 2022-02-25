@@ -17,7 +17,8 @@
 import re
 from typing import List, Dict
 from pydictdisplayfilter.evaluators.common import FieldEvaluator, IPv4RangeEvaluator, ListEvaluator, NumberEvaluator, \
-    IntegerEvaluator, StringEvaluator, DateEvaluator, IPv4AddressEvaluator, IPv6AddressEvaluator, BasicEvaluator
+    IntegerEvaluator, StringEvaluator, DateEvaluator, IPv4AddressEvaluator, IPv6AddressEvaluator, BasicEvaluator, \
+    VersionStringEvaluator
 
 
 class Evaluator:
@@ -60,18 +61,6 @@ class Evaluator:
         for evaluator in self.evaluators.get(expression.operator):
             if evaluator.is_type(expression.value, item_value):
                 yield evaluator
-
-    #test = {'value': ['1', '2', '3']}
-    # value == 1 -- any(i = v for i in val)     == True
-    # value != 1 -- not any                     == False
-
-    # value != 1
-    # value == 1
-    # not (operator == '!=' and any(value))      value == 1     ==>  false       true
-    # not (operator == '!=' and any(value))      value != 1     ==>  true
-    #
-    # 1         0       1
-    # 0        1        0
 
     def _evaluate(self, evaluator, expression, item_value) -> bool:
         """ Returns True, if the value matches the expression using the given evaluator. """
@@ -120,14 +109,14 @@ class DefaultEvaluator(Evaluator):
                 NumberEvaluator(lambda expression_value, item_value: expression_value == item_value),
                 IPv4AddressEvaluator(lambda expression_value, item_value: item_value == expression_value),
                 IPv6AddressEvaluator(lambda expression_value, item_value: item_value == expression_value),
-                StringEvaluator(lambda expression_value, item_value: expression_value == item_value)
+                StringEvaluator(lambda expression_value, item_value: expression_value == item_value),
             ],
             # neq
             '!=': [
                 NumberEvaluator(lambda expression_value, item_value: expression_value != item_value),
                 IPv4AddressEvaluator(lambda expression_value, item_value: item_value != expression_value),
                 IPv6AddressEvaluator(lambda expression_value, item_value: item_value != expression_value),
-                StringEvaluator(lambda expression_value, item_value: expression_value != item_value)
+                StringEvaluator(lambda expression_value, item_value: expression_value != item_value),
             ],
             # matches
             '~': [StringEvaluator(lambda expression_value, item_value: bool(re.search(expression_value, item_value)))],
@@ -138,28 +127,28 @@ class DefaultEvaluator(Evaluator):
                 IPv4AddressEvaluator(lambda expression_value, item_value: item_value >= expression_value),
                 IPv6AddressEvaluator(lambda expression_value, item_value: item_value >= expression_value),
                 DateEvaluator(lambda expression_value, item_value: item_value >= expression_value),
-                NumberEvaluator(lambda expression_value, item_value: item_value >= expression_value)
+                NumberEvaluator(lambda expression_value, item_value: item_value >= expression_value),
             ],
             # gt
             '>': [
                 IPv4AddressEvaluator(lambda expression_value, item_value: item_value > expression_value),
                 IPv6AddressEvaluator(lambda expression_value, item_value: item_value > expression_value),
                 DateEvaluator(lambda expression_value, item_value: item_value > expression_value),
-                NumberEvaluator(lambda expression_value, item_value: item_value > expression_value)
+                NumberEvaluator(lambda expression_value, item_value: item_value > expression_value),
             ],
             # le
             '<=': [
                 IPv4AddressEvaluator(lambda expression_value, item_value: item_value <= expression_value),
                 IPv6AddressEvaluator(lambda expression_value, item_value: item_value <= expression_value),
                 DateEvaluator(lambda expression_value, item_value: item_value <= expression_value),
-                NumberEvaluator(lambda expression_value, item_value: item_value <= expression_value)
+                NumberEvaluator(lambda expression_value, item_value: item_value <= expression_value),
             ],
             # lt
             '<': [
                 IPv4AddressEvaluator(lambda expression_value, item_value: item_value < expression_value),
                 IPv6AddressEvaluator(lambda expression_value, item_value: item_value < expression_value),
                 DateEvaluator(lambda expression_value, item_value: item_value < expression_value),
-                NumberEvaluator(lambda expression_value, item_value: item_value < expression_value)
+                NumberEvaluator(lambda expression_value, item_value: item_value < expression_value),
             ],
             # (no alternative symbol)
             '&': [IntegerEvaluator(lambda expression_value, item_value: (item_value & expression_value) > 0)],

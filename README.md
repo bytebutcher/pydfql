@@ -48,7 +48,7 @@ Initialize ```DictDisplayFilter``` with a list of dictionaries:
 > from pydictdisplayfilter import DictDisplayFilter
 > actors = [
     {"name": ["Laurence", "Fishburne"], "age": {"born": "1961"}, "gender": "male"},
-    {"name": ["Keanu", "Reeves"], "age": {"born": "1964"}, "gender": "male", "power": ["flight", "bulle-time"]},
+    {"name": ["Keanu", "Reeves"], "age": {"born": "1964"}, "gender": "male", "power": ["flight", "bullet-time"]},
     {"name": ["Joe", "Pantoliano"], "age": {"born": "1951"}, "gender": "male"},
     {"name": ["Carrie-Anne", "Moss"], "age": {"born": "1967"}, "gender": "female"}
 ]

@@ -21,6 +21,7 @@ from typing import Optional, Union, Callable, Any, List
 import ipranger
 import pyparsing
 from dateutil.parser import parse as parse_date
+from packaging import version
 
 from pydictdisplayfilter.exceptions import EvaluationError
 
@@ -347,3 +348,14 @@ class IPv4RangeEvaluator(BasicEvaluator):
             if p1 in part_1 and p2 in part_2 and p3 in part_3 and p4 in part_4:
                 return True
         return False
+
+
+class VersionStringEvaluator(CallbackEvaluator):
+    """ Evaluates a callback where both arguments are versions (e.g. '1.1.1', '1.3.4a', ...). """
+
+    def _convert_item_value(self, value: Any) -> version.Version:
+        return self._convert_expression_value(value)
+
+    def _convert_expression_value(self, value: Optional[Union[int, str]]) -> version.Version:
+        """ Converts the expression value to an IPv6 address. """
+        return version.parse(value)
