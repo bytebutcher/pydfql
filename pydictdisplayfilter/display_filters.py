@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import functools
+from abc import ABC, abstractmethod
 from typing import List, Dict, Callable
 
 from pydictdisplayfilter.evaluators import Evaluator, DefaultEvaluator
@@ -25,7 +26,7 @@ from pydictdisplayfilter.parsers import DisplayFilterParser
 from pydictdisplayfilter.slicers import BasicSlicer
 
 
-class BaseDisplayFilter:
+class BaseDisplayFilter(ABC):
     """ Base class of a display filter. """
 
     def __init__(self,
@@ -90,8 +91,9 @@ class BaseDisplayFilter:
         except Exception as err:
             raise EvaluationError(err)
 
+    @abstractmethod
     def filter(self, display_filter):
-        raise NotImplementedError("This method should be implemented by the derived class!")
+        pass
 
 
 class DictDisplayFilter(BaseDisplayFilter):

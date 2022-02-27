@@ -17,7 +17,7 @@
 import re
 from typing import List, Dict
 from pydictdisplayfilter.evaluators.common import FieldEvaluator, IPv4RangeEvaluator, ListEvaluator, NumberEvaluator, \
-    IntegerEvaluator, StringEvaluator, DateEvaluator, IPv4AddressEvaluator, IPv6AddressEvaluator, BasicEvaluator, \
+    IntegerEvaluator, StringEvaluator, DateEvaluator, IPv4AddressEvaluator, IPv6AddressEvaluator, AbstractBasicEvaluator, \
     VersionStringEvaluator
 
 
@@ -48,7 +48,7 @@ class Evaluator:
         'in': []
     }
 
-    def __init__(self, evaluators: Dict[str, List[BasicEvaluator]]):
+    def __init__(self, evaluators: Dict[str, List[AbstractBasicEvaluator]]):
         """
         Initializes the Evaluator.
         :param evaluators: A dictionary of evaluators whereby each key stands for a operator.

@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import ipaddress
 import logging
+from abc import ABC, abstractmethod
 from typing import Optional, Union, Callable, Any, List
 
 import ipranger
@@ -26,7 +27,7 @@ from packaging import version
 from pydictdisplayfilter.exceptions import EvaluationError
 
 
-class BasicEvaluator:
+class AbstractEvaluator(ABC):
     """
     A basic evaluator which is ment to be used as base class for other evaluators and is quite useless on its own.
     """
@@ -35,6 +36,7 @@ class BasicEvaluator:
         """ Initializes the BasicEvaluator. """
         self._logger = logging.getLogger()
 
+    @abstractmethod
     def _convert_expression_value(self, value: Optional[Union[int, str]]) -> Optional[Any]:
         """
         Converts a given value as defined in the expression to a more useful representation.
@@ -42,8 +44,9 @@ class BasicEvaluator:
                       we may expect an integer, string or None value here.
         :return: the transformed value.
         """
-        return value  # Return untransformed value by default.
+        pass
 
+    @abstractmethod
     def _convert_item_value(self, value: Optional[Any]) -> Optional[Any]:
         """
         Converts a given value from the datastore to a more useful representation.
@@ -51,8 +54,9 @@ class BasicEvaluator:
                       value is not known. Note that the value can also be None.
         :return: the transformed value.
         """
-        return value  # Return untransformed by default.
+        pass
 
+    @abstractmethod
     def _evaluate(self, expression_value: Any, item_value: Any) -> bool:
         """
         Evaluates the expression- and item-value.
@@ -60,7 +64,7 @@ class BasicEvaluator:
         :param item_value: a given transformed value from the datastore.
         :return: True, when the item-value matches the expression.
         """
-        return False  # Return False by default.
+        pass
 
     def is_type(self, expression_value: Any, item_value: Any) -> bool:
         """
@@ -97,7 +101,29 @@ class BasicEvaluator:
             return False or operator == '!='
 
 
-class CallbackEvaluator(BasicEvaluator):
+class AbstractBasicEvaluator(AbstractEvaluator):
+    """ Basic but still abstract implementation of an evaluator which does not transform expression and item value.  """
+
+    def _convert_expression_value(self, value: Optional[Union[int, str]]) -> Optional[Any]:
+        """
+        Converts a given value as defined in the expression to a more useful representation.
+        :param value: a given value from the actual expression. Since we are kind of in control of the parsing process
+                      we may expect an integer, string or None value here.
+        :return: the transformed value.
+        """
+        return value  # Return untransformed value by default.
+
+    def _convert_item_value(self, value: Optional[Any]) -> Optional[Any]:
+        """
+        Converts a given value from the datastore to a more useful representation.
+        :param value: a given value from the datastore. Since we are not in control of the datastore the type of this
+                      value is not known. Note that the value can also be None.
+        :return: the transformed value.
+        """
+        return value  # Return untransformed by default.
+
+
+class CallbackEvaluator(AbstractBasicEvaluator):
     """ A basic evaluator which evaluates a callback with the given expression- and item-value. """
 
     def __init__(self, callback: Callable[[Any, Any], bool]):
@@ -113,7 +139,7 @@ class CallbackEvaluator(BasicEvaluator):
         return self._callback(expression_value, item_value)
 
 
-class FieldEvaluator(BasicEvaluator):
+class FieldEvaluator(AbstractBasicEvaluator):
     """ A basic evaluator which tests that a given field exists in the datastore. """
 
     def _evaluate(self, expression_value: Any, item_value: Any) -> bool:
@@ -124,7 +150,7 @@ class FieldEvaluator(BasicEvaluator):
         return item_value is not None and item_value != "" and item_value != [] and item_value != {}
 
 
-class ListEvaluator(BasicEvaluator):
+class ListEvaluator(AbstractBasicEvaluator):
     """
     A basic evaluator which tests whether a given item can be found in the expression (e.g. "x in {'a', 'b', 'c'}").
     """
@@ -309,7 +335,7 @@ class IPv6AddressEvaluator(CallbackEvaluator):
         return ipaddress.IPv6Address(value)
 
 
-class IPv4RangeEvaluator(BasicEvaluator):
+class IPv4RangeEvaluator(AbstractBasicEvaluator):
     """ Evaluates whether a given IPv4-address is within a list of IPv4-addresses. """
 
     def is_type(self, expression_value: Any, item_value: Any):
