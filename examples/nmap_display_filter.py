@@ -74,7 +74,8 @@ class NmapXMLParser:
 
 
 if __name__ == '__main__':
-    logger = logging.getLogger()
+    logging.basicConfig(format='%(message)s')
+    logger = logging.getLogger(__name__)
     parser = argparse.ArgumentParser(description='Display filter for nmap xml file.')
     parser.add_argument('nmap_xml_file', action='store', metavar='FILE', help='nmap xml-file to load')
 

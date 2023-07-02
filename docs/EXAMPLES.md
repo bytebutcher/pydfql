@@ -7,7 +7,7 @@
 
 ## CSV Display Filter
 
-This example shows how easy it is to create a display filter for CSV-files:
+This example shows how to create a display filter for CSV-files:
 ```commandline
 python3 examples/csv_display_filter.py data/example.csv
 # Enter ?help for a list of commands.
@@ -31,9 +31,36 @@ Neo  | 35  | male   | False
 
 See <a href="https://github.com/bytebutcher/python-dict-display-filter/raw/main/examples/csv_display_filter.py">examples/csv_display_filter.py</a> for the actual source code.
 
+
+# SQLite Display Filter
+
+This example shows how to create a display filter for a sqlite database:
+```commandline
+python3 examples/sqlite_display_filter.py data/example.sqlite
+# Enter ?help for a list of commands.
+```
+```
+> fields
+name
+age
+gender
+killed
+```
+```
+> filter name == Neo
+
+name | age | gender | killed
+---- | --- | ------ | ------
+Neo  | 35  | male   | 0 
+
+1 row in set (0.01 secs)
+```
+
+See <a href="https://github.com/bytebutcher/python-dict-display-filter/raw/main/examples/sqlite_display_filter.py">examples/sqlite_display_filter.py</a> for the actual source code.
+
 ## Nmap Display Filter
 
-This example shows how easy it is to create a display filter for nmap-xml-files:
+This example shows how to create a display filter for nmap-xml-files:
 ```commandline
 python3 examples/nmap_display_filter.py data/nmap_example.xml
 # Enter ?help for a list of commands.

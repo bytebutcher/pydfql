@@ -36,7 +36,8 @@ def read_csv_file(csv_file):
 
 
 if __name__ == '__main__':
-    logger = logging.getLogger()
+    logging.basicConfig(format='%(message)s')
+    logger = logging.getLogger(__name__)
     parser = argparse.ArgumentParser(description='Display filter for csv file.')
     parser.add_argument('csv_file', action='store', metavar='FILE', help='CSV-file to load')
 

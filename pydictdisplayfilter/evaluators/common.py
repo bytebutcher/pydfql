@@ -34,7 +34,7 @@ class AbstractEvaluator(ABC):
 
     def __init__(self):
         """ Initializes the BasicEvaluator. """
-        self._logger = logging.getLogger()
+        self._logger = logging.getLogger(__name__)
 
     @abstractmethod
     def _convert_expression_value(self, value: Optional[Union[int, str]]) -> Optional[Any]:
@@ -304,7 +304,7 @@ class IntegerEvaluator(NumberEvaluator):
         :raises Exception when value can not be converted. Since we expect either an integer, string or None here
                 it is rather unlikely that an exception is raised here.
         """
-        return not isinstance(value, bool) and int(super()._convert_expression_value(value))
+        return int(value) if isinstance(value, bool) else int(super()._convert_expression_value(value))
 
 
 class IPv4AddressEvaluator(CallbackEvaluator):

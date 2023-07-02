@@ -14,9 +14,10 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-import functools
+import functools, re
 from abc import ABC, abstractmethod
-from typing import List, Dict, Callable
+from sqlite3 import Connection
+from typing import List, Dict, Callable, Union
 
 from pydictdisplayfilter.evaluators import Evaluator, DefaultEvaluator
 from pydictdisplayfilter.exceptions import EvaluationError
@@ -30,14 +31,12 @@ class BaseDisplayFilter(ABC):
     """ Base class of a display filter. """
 
     def __init__(self,
-                 data: List[dict],
                  field_names: List[str] = None,
                  functions: Dict[str, Callable] = None,
                  slicers: List[BasicSlicer] = None,
                  evaluator: Evaluator = None):
         """
         Initializes the BaseDisplayFilter.
-        :param data: A list of dictionaries to filter on.
         :param field_names: A list of field names which are allowed in the display filter. If no field names are given
                             there are no restrictions regarding specifying field names.
         :param functions: A dictionary of functions whereby the key specifies the name. If no functions are supplied
@@ -46,7 +45,6 @@ class BaseDisplayFilter(ABC):
         :param evaluator: The evaluator used to evaluate the expressions. If no evaluator is specified the
                           DefaultEvaluator is used.
         """
-        self._data = data
         functions = functions if functions else {
             "len": lambda value: len(value),
             "lower": lambda value: value.lower(),
@@ -54,6 +52,8 @@ class BaseDisplayFilter(ABC):
         }
         self._slicer_factory = SlicerFactory(slicers)
         self._evaluator = evaluator if evaluator else DefaultEvaluator()
+        self._functions = functions
+        self._field_names = field_names
         self._display_filter_parser = DisplayFilterParser(field_names, functions)
 
     def _get_item_value(self, expression, item) -> str:
@@ -91,32 +91,156 @@ class BaseDisplayFilter(ABC):
         except Exception as err:
             raise EvaluationError(err)
 
-    @abstractmethod
-    def filter(self, display_filter):
-        pass
-
-
-class DictDisplayFilter(BaseDisplayFilter):
-    """ Allows to filter a dictionary based on a display filter. """
-
-    def filter(self, display_filter):
-        """ Filters the data based on a display filter. """
-        expressions = self._display_filter_parser.parse(display_filter)
-        for item in self._data:
+    def _filter_data(self, data: List, expressions: List[Union[Expression, str]]) -> List:
+        for item in data:
             if self._evaluate_expressions(expressions, item):
                 yield item
 
+    @property
+    def field_names(self) -> List[str]:
+        return self._field_names
+
+    @field_names.setter
+    def field_names(self, field_names: List[str] = None):
+        self._field_names = field_names
+        self._display_filter_parser = DisplayFilterParser(self._field_names, self._functions)
+
+    @property
+    def functions(self) -> Dict[str, Callable]:
+        return self._functions
+
+    @functions.setter
+    def functions(self, functions: Dict[str, Callable]):
+        self._functions = functions
+        self._display_filter_parser = DisplayFilterParser(self._field_names, self._functions)
+
+    @abstractmethod
+    def filter(self, display_filter: str):
+        raise NotImplementedError()
+
+
+class DictDisplayFilter(BaseDisplayFilter):
+    """ Allows to filter a dictionary using a display filter. """
+
+    def __init__(self,
+                 data: List[dict],
+                 field_names: List[str] = None,
+                 functions: Dict[str, Callable] = None,
+                 slicers: List[BasicSlicer] = None,
+                 evaluator: Evaluator = None):
+        """
+        Initializes the DictDisplayFilter.
+        :param data: A list of dictionaries to filter on.
+        """
+        super().__init__(field_names, functions, slicers, evaluator)
+        self._data = data
+
+    def filter(self, display_filter: str):
+        """ Filters the data using the display filter. """
+        expressions = self._display_filter_parser.parse(display_filter)
+        yield from self._filter_data(self._data, expressions)
+
 
 class ListDisplayFilter(DictDisplayFilter):
-    """ Allows to filter a list of lists based on a display filter. """
+    """ Allows to filter a list of lists using a display filter. """
 
-    def __init__(self, data: List[List], field_names: List[str]):
+    def __init__(self,
+                 data: List[List],
+                 field_names: List[str] = None,
+                 functions: Dict[str, Callable] = None,
+                 slicers: List[BasicSlicer] = None,
+                 evaluator: Evaluator = None):
+        """
+        Initializes the ListDisplayFilter.
+        :param data: A list of lists to filter on.
+        """
         super().__init__([
             dict(zip(field_names, item)) for item in data
-        ], field_names)
+        ], field_names, functions, slicers, evaluator)
 
-    def filter(self, display_filter):
-        """ Filters the data based on a display filter. """
+    def filter(self, display_filter: str):
+        """ Filters the data using the display filter. """
         for item in super().filter(display_filter):
             # Return each item as a list of values instead of a dictionary of key values.
             yield item.items()
+
+
+class SQLDisplayFilter(BaseDisplayFilter):
+    """
+    Allows to filter a table of a SQL database using a display filter.
+
+    This implementation is memory intensive since it queries all data from the database table and transforms it into a
+    list of dictionaries before applying the actual display filter.
+    """
+
+    def __init__(self,
+                 connection: Connection,
+                 table_name: str = None,
+                 column_names: List[str] = None,
+                 functions: Dict[str, Callable] = None,
+                 slicers: List[BasicSlicer] = None,
+                 evaluator: Evaluator = None
+                 ):
+        """
+        Initializes the SQLDisplayFilter.
+        :param connection:
+        :param table_name: The name of the database table where the display filter will be applied.
+        :param column_names: A list of column names which are allowed in the display filter. If no column names are
+                             given there are no restrictions regarding specifying column names.
+        """
+        self._connection = connection
+        self.table_name = table_name
+        super().__init__(column_names, functions, slicers, evaluator)
+
+    def _validate_table_name(self, table_name: str) -> bool:
+        """ Checks whether the table name contains invalid characters or keywords"""
+        pattern = re.compile("^[a-zA-Z_][a-zA-Z0-9_]*$")
+        if pattern.match(table_name) and not self._is_sql_keyword(table_name):
+            return True
+        else:
+            return False
+
+    def _is_sql_keyword(self, value: str) -> bool:
+        """ Checks whether the given string is a reserved SQL keyword."""
+        sql_keywords = [
+            'select', 'from', 'where', 'join', 'order', 'group', 'having', 'union', 'intersect', 'except', 'limit',
+            'offset'
+        ]
+        return value.lower() in sql_keywords
+
+    def _get_column_names(self) -> List[str]:
+        """ Retrieves the column names for the current table from the database. """
+        cursor = self._connection.execute(f"SELECT * FROM {self._table_name} LIMIT(0)")
+        return list(map(lambda x: x[0], cursor.description))
+
+    def _get_table_data(self) -> List[dict]:
+        """ Retrieves the table data from the database. """
+        cursor = self._connection.execute(f"SELECT * FROM {self._table_name}")
+        rows = cursor.fetchall()
+        return [dict(zip(self.column_names, row)) for row in rows]
+
+    @property
+    def table_name(self) -> str:
+        return self._table_name
+
+    @table_name.setter
+    def table_name(self, table_name: str):
+        if table_name is not None and not self._validate_table_name(table_name):
+            raise ValueError(f"'{table_name}' is not a valid table name.")
+        self._table_name = table_name
+
+    @property
+    def column_names(self) -> List[str]:
+        if not self.field_names:
+            self.field_names = self._get_column_names()
+        return self.field_names
+
+    @column_names.setter
+    def column_names(self, column_names: List[str]):
+        self.field_names = column_names
+
+    def filter(self, display_filter: str):
+        """ Filters the data using the display filter. """
+        expressions = self._display_filter_parser.parse(display_filter)
+        table_data = self._get_table_data()
+        yield from self._filter_data(table_data, expressions)

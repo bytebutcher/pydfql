@@ -11,7 +11,7 @@ README = (HERE / "README.md").read_text()
 # This call to setup() does all the work
 setup(
     name="python-dict-display-filter",
-    version="0.9.7",
+    version="0.9.8",
     description="A Wireshark-like display filter for dictionaries.",
     long_description=README,
     long_description_content_type="text/markdown",
@@ -25,6 +25,7 @@ setup(
     ],
     packages=setuptools.find_packages(),
     install_requires=[
+        'packaging==23.1',
         'parameterized==0.8.1',
         'pyparsing==3.0.6',
         'ipranger==1.1.2',

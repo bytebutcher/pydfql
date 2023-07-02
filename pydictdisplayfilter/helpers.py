@@ -23,16 +23,19 @@ import traceback
 from typing import List, Set
 
 from pydictdisplayfilter import DictDisplayFilter
+from pydictdisplayfilter.display_filters import BaseDisplayFilter
 from pydictdisplayfilter.exceptions import ParserError, EvaluationError
 
 
-class DictTable:
+class TableError(Exception):
+    pass
+
+
+class Table:
     """ Data store with filter capabilities and pretty table printout. """
 
-    def __init__(self, data_store):
-        """ Initializes the DictTable with a data store. """
-        self._data_store = data_store
-        self._dict_display_filter = DictDisplayFilter(data_store)
+    def __init__(self, display_filter: BaseDisplayFilter):
+        self._display_filter = display_filter
 
     def _make_table(self, data_store) -> List[str]:
         """ Creates a table including header from the data store. """
@@ -52,7 +55,7 @@ class DictTable:
         header = list(data_store[0].keys())
         items = [list(item.values()) for item in data_store]
         return [
-            max(map(len, column)) for column in zip(*items + [header])
+            max(len(str(item)) for item in column) for column in zip(*items + [header])
         ]
 
     def _make_footer(self, items, duration) -> List[str]:
@@ -67,42 +70,38 @@ class DictTable:
         result.append("")
         return result
 
-    def fields(self, thorough: bool = False) -> Set[str]:
-        """
-        Returns the field names used in the data store.
-        :param thorough: if enabled, scans each item in the data store for its field names, otherwise only the first
-                         item is looked upon which is usually enough. Disabled by default.
-        """
-        if not self._data_store:
-            # No items in data store, so there are no fields to query either.
-            return set()
-        if not thorough:
-            return self._data_store[0].keys()
-        else:
-            return set(itertools.chain.from_iterable([item.keys() for item in self._data_store]))
+    def fields(self) -> List[str]:
+        """ Returns the field names used in the data store. """
+        raise NotImplementedError()
 
-    def filter(self, display_filter) -> str:
+    def filter(self, display_filter: str) -> str:
         """
         Filters the items in the data store using the specified display filter and returns the result in a table.
         """
         start = time.time()
-        result = list(self._dict_display_filter.filter(display_filter))
+        result = list(self._display_filter.filter(display_filter))
         end = time.time()
         duration = end - start
         return os.linesep.join(self._make_table(result) + self._make_footer(result, duration))
 
 
-class DictDisplayFilterShell(cmd.Cmd):
+class DisplayFilterShell(cmd.Cmd):
     """ A little shell for the display filter. """
 
     intro = 'Type help or ? to list commands.\n'
     prompt = '> '
 
-    def __init__(self, data_store):
+    def __init__(self, table: Table):
         """ Initializes the DisplayFilterShell with a data store. """
         super().__init__()
-        self._logger = logging.getLogger()
-        self._dict_table = DictTable(data_store)
+        self._logger = self._init_logger()
+        self._table = table
+
+    def _init_logger(self) -> logging.Logger:
+        """ Setups the logger. Makes sure that info messages are actually printed. """
+        logger = logging.getLogger(__name__)
+        logger.setLevel(logging.INFO)
+        return logger
 
     def do_debug(self, *args):
         """ Toggles debug mode on/off. """
@@ -116,10 +115,38 @@ class DictDisplayFilterShell(cmd.Cmd):
     def do_fields(self, *args):
         """ Returns the fields the display filter can be applied on. """
         try:
-            for key in self._dict_table.fields():
+            for key in self._table.fields():
                 print(key)
         except Exception as err:
             self._logger.error('There was an error retrieving the fields!')
+            self._logger.debug(err)
+            if self._logger.level == logging.DEBUG:
+                traceback.print_exc()
+
+    def do_filter(self, *args):
+        """ Applies the given display filter to the data and prints the result. """
+        try:
+            display_filter = ' '.join(args)
+            if not display_filter:
+                self._logger.error("No arguments supplied to filter function.")
+                return
+            print(self._table.filter(display_filter))
+        except ParserError as err:
+            self._logger.error('Invalid display filter!')
+            self._logger.debug(err)
+            if self._logger.level == logging.DEBUG:
+                traceback.print_exc()
+        except EvaluationError as err:
+            self._logger.error('There was an unknown error evaluating the results!')
+            self._logger.debug(err)
+            if self._logger.level == logging.DEBUG:
+                traceback.print_exc()
+        except TableError as err:
+            self._logger.error(err)
+            if self._logger.level == logging.DEBUG:
+                traceback.print_exc()
+        except Exception as err:
+            self._logger.error('There was an unknown error displaying the results!')
             self._logger.debug(err)
             if self._logger.level == logging.DEBUG:
                 traceback.print_exc()
@@ -134,30 +161,6 @@ class DictDisplayFilterShell(cmd.Cmd):
         self._logger.error("This function is currently not implemented!")
         return False
 
-    def do_filter(self, *args):
-        """ Applies the given display filter to the data and prints the result. """
-        try:
-            display_filter = ' '.join(args)
-            if not display_filter:
-                self._logger.error("No arguments supplied to filter function.")
-                return
-            print(self._dict_table.filter(display_filter))
-        except ParserError as err:
-            self._logger.error('Invalid display filter!')
-            self._logger.debug(err)
-            if self._logger.level == logging.DEBUG:
-                traceback.print_exc()
-        except EvaluationError as err:
-            self._logger.error('There was an unknown error evaluating the results!')
-            self._logger.debug(err)
-            if self._logger.level == logging.DEBUG:
-                traceback.print_exc()
-        except Exception as err:
-            self._logger.error('There was an unknown error displaying the results!')
-            self._logger.debug(err)
-            if self._logger.level == logging.DEBUG:
-                traceback.print_exc()
-
     def get_names(self):
         """ Override get_names() method of cmd.Cmd to remove functions from the help we do not want to show. """
         names = super().get_names()
@@ -171,3 +174,35 @@ class DictDisplayFilterShell(cmd.Cmd):
     def do_exit(self, *args):
         """ Exit application. """
         return True
+
+
+class DictTable(Table):
+    """ Data store with filter capabilities and pretty table printout. """
+
+    def __init__(self, data_store: List[dict]):
+        """ Initializes the DictTable with a data store. """
+        self._data_store = data_store
+        super().__init__(DictDisplayFilter(data_store))
+
+    def fields(self, thorough: bool = False) -> List[str]:
+        """
+        Returns the field names used in the data store.
+        :param thorough: if enabled, scans each item in the data store for its field names, otherwise only the first
+                         item is looked upon which is usually enough. Disabled by default.
+        """
+        if not self._data_store:
+            # No items in data store, so there are no fields to query either.
+            return list()
+
+        if not thorough:
+            return list(self._data_store[0].keys())
+        else:
+            return itertools.chain.from_iterable([item.keys() for item in self._data_store])
+
+
+class DictDisplayFilterShell(DisplayFilterShell):
+    """ A little shell for querying a list of dictionaries using the display filter. """
+
+    def __init__(self, data_store: List[dict]):
+        """ Initializes the DictDisplayFilterShell with a data store. """
+        super().__init__(DictTable(data_store))
