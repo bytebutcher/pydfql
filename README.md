@@ -10,87 +10,74 @@
 </div>
 <br>
 
-Wireshark-like display filter for python dictionaries.
+A Wireshark-like display filter for Python dictionaries. This tool allows you to easily filter, analyze, and 
+manipulate data in Python dictionaries. It offers a range of features including comparison operators, 
+combining operators, membership operators, and more. 
 
-## Setup
+## Table of Contents
+1. [Quick Start](#quick-start)
+2. [Usage](#usage)
+3. [Features](#features)
+4. [Examples](#examples)
+5. [Acknowledgements](#acknowledgements)
+
+## Quick Start
+
+Here's a simple example to get you started. First, install the package:
+
 ```commandline
 pip3 install python-dict-display-filter
 ```
 
-## Usage
+Then, use it to filter a list of dictionaries:
+```
+from pydictdisplayfilter import DictDisplayFilter
+actors = [
+    {"name": ["Laurence", "Fishburne"], "age": {"born": "1961"}, "gender": "male"},
+    {"name": ["Keanu", "Reeves"], "age": {"born": "1964"}, "gender": "male", "power": ["flight", "bullet-time"]},
+    {"name": ["Joe", "Pantoliano"], "age": {"born": "1951"}, "gender": "male"},
+    {"name": ["Carrie-Anne", "Moss"], "age": {"born": "1967"}, "gender": "female"}
+]
+ddf = DictDisplayFilter(actors)
 
-The basics and the syntax of the display filter are described in the 
+# This will filter the list to show only male actors born between 1960 and 1965 whose names end with 'e'
+filtered_actors = ddf.filter("gender == male and (age.born > 1960 and age.born < 1965) and name matches .*e$")
+
+print(list(filtered_actors))
+[{'name': ['Laurence', 'Fishburne'], 'age': {'born': '1961'}, 'gender': 'male'}]
+```
+
+For more details, please refer to the 
 <a href="https://github.com/bytebutcher/python-dict-display-filter/blob/main/docs/USER_GUIDE.md">User Guide</a>.
 
-If you want to see some advanced examples of how ```python-dict-display-filter``` can be put to use checkout the 
-<a href="https://github.com/bytebutcher/python-dict-display-filter/blob/main/docs/EXAMPLES.md">Examples</a>.
-
-If you want to use ```python-dict-display-filter``` in your own application and customize it to your needs 
-check out the 
-<a href="https://github.com/bytebutcher/python-dict-display-filter/blob/main/docs/DEVELOPER_GUIDE.md">Developer Guide</a>.
-
 ## Features
-The following overview shows all the supported features of the display filter:
+
+Python Dictionary Display Filter supports a wide range of features, including:
 * **Comparison Operators:** ```==```, ```!=```, ```<=```, ```<```, ```>=```, ```>```, ```~=```, ```~```, ```&```
 * **Combining Operators:** ```and```, ```or```, ```xor```, ```not``` 
 * **Membership Operators:** ```in```
 * **Types:** ```Text```, ```Number```, ```Date & Time```, ```Ethernet-```, ```IPv4-```, ```IPv6-Address```
 * **Slicing:** ```Text```, ```Ethernet-```, ```IPv4-```, ```IPv6-Address```
 * **Functions:** ```upper```, ```lower```, ```len```
+* **Data Sources**: ```CSV```, ```Dictionaries```, ```JSON```, ```SQLite```
 
 For a detailed description of the individual features check out the
 <a href="https://github.com/bytebutcher/python-dict-display-filter/blob/main/docs/USER_GUIDE.md">User Guide</a>.
 
 ## Examples 
 
-Initialize ```DictDisplayFilter``` with a list of dictionaries:
-```
-> from pydictdisplayfilter import DictDisplayFilter
-> actors = [
-    {"name": ["Laurence", "Fishburne"], "age": {"born": "1961"}, "gender": "male"},
-    {"name": ["Keanu", "Reeves"], "age": {"born": "1964"}, "gender": "male", "power": ["flight", "bullet-time"]},
-    {"name": ["Joe", "Pantoliano"], "age": {"born": "1951"}, "gender": "male"},
-    {"name": ["Carrie-Anne", "Moss"], "age": {"born": "1967"}, "gender": "female"}
-]
-> ddf = DictDisplayFilter(actors)
-```
+For detailed examples of how the display filter can be utilized, please refer to the following:
 
-Show only actors with some kind of super-power:
-```
-> ddf.filter("power")
-```
+* [CSV Display Filter](https://github.com/bytebutcher/python-dict-display-filter/blob/main/docs/EXAMPLES.md#csv-display-filter)
+* [JSON Display Filter](https://github.com/bytebutcher/python-dict-display-filter/blob/main/docs/EXAMPLES.md#json-display-filter)
+* [SQLite Display Filter](https://github.com/bytebutcher/python-dict-display-filter/blob/main/docs/EXAMPLES.md#sqlite-display-filter)
+* [Nmap Display Filter](https://github.com/bytebutcher/python-dict-display-filter/blob/main/docs/EXAMPLES.md#nmap-display-filter)
 
-Show only actors which were born before 1965:
-```
-> ddf.filter("age.born < 1965")
-```
+## Acknowledgements
 
-Show only female actors:
-```
-> ddf.filter("gender == female")
-```
+This project wouldn't be possible without these awesome projects:
 
-Show all male actors which are born between 1960 and 1965:
-```
-> ddf.filter("gender == male and (age.born > 1960 and age.born < 1965)")
-```
-
-Show all actors which name contain the character 'e':
-```
-> ddf.filter("name contains e")
-```
-
-Show all actors which name matches a regular expression:
-```
-> ddf.filter("name matches .*e$")
-```
-
-## Inspired by
-
-* <a href="https://wiki.wireshark.org/DisplayFilters">Wireshark Display Filter</a>
-
-## Powered by
-
+* <a href="https://wiki.wireshark.org/DisplayFilters">wireshark display filter</a>: Display filter for filtering network packages
 * <a href="https://github.com/wolever/parameterized">parameterized</a>: Parameterized testing with any Python test framework
 * <a href="https://github.com/pyparsing/pyparsing/">pyparsing</a>: Creating PEG-parsers made easy
 * <a href="https://github.com/bytebutcher/ipranger/">ipranger</a>: Parsing and matching IPv4-addresses

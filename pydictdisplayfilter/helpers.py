@@ -15,15 +15,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import cmd
-import itertools
 import logging
 import os
 import time
 import traceback
-from typing import List, Set
+from typing import List
 
-from pydictdisplayfilter import DictDisplayFilter
-from pydictdisplayfilter.display_filters import BaseDisplayFilter
+from pydictdisplayfilter.display_filters import BaseDisplayFilter, DictDisplayFilter
 from pydictdisplayfilter.exceptions import ParserError, EvaluationError
 
 
@@ -37,7 +35,7 @@ class Table:
     def __init__(self, display_filter: BaseDisplayFilter):
         self._display_filter = display_filter
 
-    def _make_table(self, data_store) -> List[str]:
+    def _make_table(self, data_store: List[dict]) -> List[str]:
         """ Creates a table including header from the data store. """
         if not data_store:
             return []
@@ -50,7 +48,7 @@ class Table:
         table.insert(1, ['-' * i for i in column_size]) # Separating line
         return [""] + [ format_str.format(*item) for item in table ]
 
-    def _calculate_column_size(self, data_store) -> List[int]:
+    def _calculate_column_size(self, data_store: List[dict]) -> List[int]:
         """ Calculates and returns the necessary size of each column in the data store. """
         header = list(data_store[0].keys())
         items = [list(item.values()) for item in data_store]
@@ -58,7 +56,7 @@ class Table:
             max(len(str(item)) for item in column) for column in zip(*items + [header])
         ]
 
-    def _make_footer(self, items, duration) -> List[str]:
+    def _make_footer(self, items: List[dict], duration: float) -> List[str]:
         """ Creates a footer for the table which prints some statistics. """
         item_count = len(items)
         result = [""]
@@ -184,20 +182,12 @@ class DictTable(Table):
         self._data_store = data_store
         super().__init__(DictDisplayFilter(data_store))
 
-    def fields(self, thorough: bool = False) -> List[str]:
-        """
-        Returns the field names used in the data store.
-        :param thorough: if enabled, scans each item in the data store for its field names, otherwise only the first
-                         item is looked upon which is usually enough. Disabled by default.
-        """
+    def fields(self) -> List[str]:
+        """ Returns the field names used in the data store. """
         if not self._data_store:
             # No items in data store, so there are no fields to query either.
             return list()
-
-        if not thorough:
-            return list(self._data_store[0].keys())
-        else:
-            return itertools.chain.from_iterable([item.keys() for item in self._data_store])
+        return list(self._data_store[0].keys())
 
 
 class DictDisplayFilterShell(DisplayFilterShell):

@@ -34,5 +34,7 @@ The ```python-dict-display-filter``` defines a set of helpers which may be used 
 
 | Helper Class                 | Description                                                                                                                     |
 |------------------------------|---------------------------------------------------------------------------------------------------------------------------------|
+| ```DisplayFilterShell```     | A command line loop which allows to filter data on a provided data store. Uses Table to print the result in a pretty table.     |
 | ```DictDisplayFilterShell``` | A command line loop which allows to filter data on a provided data store. Uses DictTable to print the result in a pretty table. |
+| ```Table```                  | Initialized with a data store, provides a filter method, prints results in a pretty table.                                      | 
 | ```DictTable```              | Initialized with a data store, provides a filter method, prints results in a pretty table.                                      | 

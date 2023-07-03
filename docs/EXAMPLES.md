@@ -5,9 +5,16 @@
 <h1 align="center" style="margin-top: 0px;">Examples</h1>
 <br>
 
+## Table of Contents
+
+1. [CSV Display Filter](#csv-display-filter)
+2. [JSON Display Filter](#json-display-filter)
+3. [Nmap Display Filter](#nmap-display-filter)
+4. [SQLite Display Filter](#sqlite-display-filter)
+
 ## CSV Display Filter
 
-This example shows how to create a display filter for CSV-files:
+This example shows how to use the display filter to query CSV-files:
 ```commandline
 python3 examples/csv_display_filter.py data/example.csv
 # Enter ?help for a list of commands.
@@ -15,6 +22,7 @@ python3 examples/csv_display_filter.py data/example.csv
 ```
 > fields
 name
+actor
 age
 gender
 killed
@@ -29,38 +37,36 @@ Neo  | 35  | male   | False
 1 row in set (0.01 secs)
 ```
 
-See <a href="https://github.com/bytebutcher/python-dict-display-filter/raw/main/examples/csv_display_filter.py">examples/csv_display_filter.py</a> for the actual source code.
+See <a href="https://github.com/bytebutcher/python-dict-display-filter/raw/main/examples/csv_display_filter.py">examples/csv_display_filter.py</a> for implementation details.
 
 
-# SQLite Display Filter
+## JSON Display Filter
 
-This example shows how to create a display filter for a sqlite database:
+This example shows how to use the display filter to query JSON files:
 ```commandline
-python3 examples/sqlite_display_filter.py data/example.sqlite
+python3 examples/json_display_filter.py data/example.json
 # Enter ?help for a list of commands.
 ```
 ```
 > fields
-name
-age
 gender
-killed
+name
+power
+actor
+age.born
 ```
 ```
 > filter name == Neo
-
-name | age | gender | killed
----- | --- | ------ | ------
-Neo  | 35  | male   | 0 
+{"name": "Neo", "actor": ["Keanu", "Reeves"], "age": {"born": "1964"}, "gender": "male", "power": ["flight", "bullet-time"]}
 
 1 row in set (0.01 secs)
 ```
 
-See <a href="https://github.com/bytebutcher/python-dict-display-filter/raw/main/examples/sqlite_display_filter.py">examples/sqlite_display_filter.py</a> for the actual source code.
+See <a href="https://github.com/bytebutcher/python-dict-display-filter/raw/main/examples/json_display_filter.py">examples/json_display_filter.py</a> for implementation details.
 
 ## Nmap Display Filter
 
-This example shows how to create a display filter for nmap-xml-files:
+This example shows how to use a display filter to query Nmap XML files:
 ```commandline
 python3 examples/nmap_display_filter.py data/nmap_example.xml
 # Enter ?help for a list of commands.
@@ -98,4 +104,40 @@ host           | port | protocol | status | service
 6 rows in set (0.01 secs)
 ```
 
-See <a href="https://github.com/bytebutcher/python-dict-display-filter/raw/main/examples/nmap_display_filter.py">examples/nmap_display_filter.py</a> for the actual source code.
+See <a href="https://github.com/bytebutcher/python-dict-display-filter/raw/main/examples/nmap_display_filter.py">examples/nmap_display_filter.py</a> for implementation details.
+
+## SQLite Display Filter
+
+This example shows how to use the display filter to query a SQLite database:
+```commandline
+python3 examples/sqlite_display_filter.py data/example.sqlite
+# Enter ?help for a list of commands.
+```
+```
+> tables
+People
+```
+```
+> use People
+Database changed
+```
+```
+> fields
+name
+actor
+age
+gender
+killed
+```
+
+```
+> filter name == Neo
+
+name | actor        | age | gender | killed
+---- | ------------ | --- | ------ | ------
+Neo  | Keanu Reeves | 35  | male   | 0 
+
+1 row in set (0.01 secs)
+```
+
+See <a href="https://github.com/bytebutcher/python-dict-display-filter/raw/main/examples/sqlite_display_filter.py">examples/sqlite_display_filter.py</a> for implementation details.

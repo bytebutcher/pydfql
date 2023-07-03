@@ -20,7 +20,7 @@ import os.path
 import sys
 import traceback
 from collections import defaultdict
-from typing import List, Dict
+from typing import List
 
 from pydictdisplayfilter.helpers import DictDisplayFilterShell
 
