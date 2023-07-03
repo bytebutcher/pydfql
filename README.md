@@ -7,6 +7,8 @@
 ![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)
 ![PyPI](https://img.shields.io/pypi/v/python-dict-display-filter)
 ![GitHub](https://img.shields.io/github/license/bytebutcher/python-dict-display-filter)
+![Build Status](https://img.shields.io/travis/bytebutcher/python-dict-display-filter)
+![Coverage](https://img.shields.io/codecov/c/github/bytebutcher/python-dict-display-filter)
 </div>
 <br>
 
@@ -16,10 +18,9 @@ combining operators, membership operators, and more.
 
 ## Table of Contents
 1. [Quick Start](#quick-start)
-2. [Usage](#usage)
-3. [Features](#features)
-4. [Examples](#examples)
-5. [Acknowledgements](#acknowledgements)
+2. [Features](#features)
+3. [Examples](#examples)
+4. [Acknowledgements](#acknowledgements)
 
 ## Quick Start
 
