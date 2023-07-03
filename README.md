@@ -7,7 +7,7 @@
 ![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)
 ![PyPI](https://img.shields.io/pypi/v/python-dict-display-filter)
 ![GitHub](https://img.shields.io/github/license/bytebutcher/python-dict-display-filter)
-![Build Status](https://img.shields.io/travis/bytebutcher/python-dict-display-filter)
+![Build Status](https://img.shields.io/travis/com/bytebutcher/python-dict-display-filter)
 ![Coverage](https://img.shields.io/codecov/c/github/bytebutcher/python-dict-display-filter)
 </div>
 <br>
