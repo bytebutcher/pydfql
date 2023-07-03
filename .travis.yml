@@ -6,6 +6,6 @@ python:
   - "3.10"
   - "3.11"
 install:
-  - pip install .
+  - pip install .[test]
 script:
   - python test.py
