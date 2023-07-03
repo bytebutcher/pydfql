@@ -29,7 +29,9 @@ setup(
         'parameterized==0.8.1',
         'pyparsing==3.0.6',
         'ipranger==1.1.2',
-        'python-dateutil==2.8.2'
+        'python-dateutil==2.8.2',
+        'pytest==7.3.1',
+        'pytest-cov==4.0.0'
     ],
     include_package_data=True,
 )
