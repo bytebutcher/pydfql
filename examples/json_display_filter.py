@@ -20,10 +20,12 @@ import logging
 import os.path
 import sys
 import traceback
-from typing import List, Set
+from typing import List, Set, Dict, Callable
 
 from pydictdisplayfilter import DictDisplayFilter
+from pydictdisplayfilter.evaluators import Evaluator
 from pydictdisplayfilter.helpers import Table, DisplayFilterShell
+from pydictdisplayfilter.slicers import BasicSlicer
 
 
 def read_json_file(json_file):
@@ -38,10 +40,15 @@ def read_json_file(json_file):
 class JSONTable(Table):
     """ Data store with filter capabilities and pretty table printout. """
 
-    def __init__(self, data_store: List[dict]):
+    def __init__(self,
+                 data_store: List[dict],
+                 field_names: List[str] = None,
+                 functions: Dict[str, Callable] = None,
+                 slicers: List[BasicSlicer] = None,
+                 evaluator: Evaluator = None):
         """ Initializes the DictTable with a data store. """
         self._data_store = data_store
-        super().__init__(DictDisplayFilter(data_store))
+        super().__init__(DictDisplayFilter(data_store, field_names, functions, slicers, evaluator))
 
     def _make_table(self, data_store: List[dict]) -> List[str]:
         """ Creates a view for nested data items. """
@@ -49,7 +56,8 @@ class JSONTable(Table):
 
     def _extract_keys(self, data_store: List[dict]) -> List[str]:
         """ Extracts the keys from a nested data store. """
-        def extract_keys(data: dict, parent_key: str='') -> Set[str]:
+
+        def extract_keys(data: dict, parent_key: str = '') -> Set[str]:
             keys = set()
             if isinstance(data, dict):
                 for k, v in data.items():
@@ -62,7 +70,7 @@ class JSONTable(Table):
         all_keys = set()
         for data in data_store:
             all_keys |= extract_keys(data)
-        return list(all_keys)
+        return list(sorted(all_keys))
 
     def fields(self, thorough: bool = True) -> List[str]:
         """ Returns the field names used in the data store. """
@@ -75,9 +83,20 @@ class JSONTable(Table):
 class JSONDisplayFilterShell(DisplayFilterShell):
     """ A little shell for querying a list of dictionaries using the display filter. """
 
-    def __init__(self, data_store: List[dict]):
+    def __init__(self,
+                 data_store: List[dict],
+                 field_names: List[str] = None,
+                 functions: Dict[str, Callable] = None,
+                 slicers: List[BasicSlicer] = None,
+                 evaluator: Evaluator = None):
         """ Initializes the DictDisplayFilterShell with a data store. """
-        super().__init__(JSONTable(data_store))
+        super().__init__(
+            JSONTable(
+                data_store=data_store,
+                field_names=field_names,
+                functions=functions,
+                slicers=slicers,
+                evaluator=evaluator))
 
 
 if __name__ == '__main__':

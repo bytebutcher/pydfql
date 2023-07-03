@@ -52,9 +52,9 @@ class BaseDisplayFilter(ABC):
         }
         self._slicer_factory = SlicerFactory(slicers)
         self._evaluator = evaluator if evaluator else DefaultEvaluator()
-        self._functions = functions
-        self._field_names = field_names
-        self._display_filter_parser = DisplayFilterParser(field_names, functions)
+        self._functions = functions or []
+        self._field_names = field_names or []
+        self._display_filter_parser = DisplayFilterParser(field_names=field_names, functions=functions)
 
     def _get_item_value(self, expression, item) -> str:
         """
@@ -103,7 +103,7 @@ class BaseDisplayFilter(ABC):
     @field_names.setter
     def field_names(self, field_names: List[str] = None):
         self._field_names = field_names
-        self._display_filter_parser = DisplayFilterParser(self._field_names, self._functions)
+        self._display_filter_parser = DisplayFilterParser(field_names=self._field_names, functions=self._functions)
 
     @property
     def functions(self) -> Dict[str, Callable]:
@@ -112,7 +112,7 @@ class BaseDisplayFilter(ABC):
     @functions.setter
     def functions(self, functions: Dict[str, Callable]):
         self._functions = functions
-        self._display_filter_parser = DisplayFilterParser(self._field_names, self._functions)
+        self._display_filter_parser = DisplayFilterParser(field_names=self._field_names, functions=self._functions)
 
     @abstractmethod
     def filter(self, display_filter: str):
@@ -132,7 +132,7 @@ class DictDisplayFilter(BaseDisplayFilter):
         Initializes the DictDisplayFilter.
         :param data: A list of dictionaries to filter on.
         """
-        super().__init__(field_names, functions, slicers, evaluator)
+        super().__init__(field_names=field_names, functions=functions, slicers=slicers, evaluator=evaluator)
         self._data = data
 
     def filter(self, display_filter: str):
@@ -154,9 +154,9 @@ class ListDisplayFilter(DictDisplayFilter):
         Initializes the ListDisplayFilter.
         :param data: A list of lists to filter on.
         """
-        super().__init__([
+        super().__init__(data=[
             dict(zip(field_names, item)) for item in data
-        ], field_names, functions, slicers, evaluator)
+        ], field_names=field_names, functions=functions, slicers=slicers, evaluator=evaluator)
 
     def filter(self, display_filter: str):
         """ Filters the data using the display filter. """
@@ -190,7 +190,7 @@ class SQLDisplayFilter(BaseDisplayFilter):
         """
         self._connection = connection
         self.table_name = table_name
-        super().__init__(column_names, functions, slicers, evaluator)
+        super().__init__(field_names=column_names, functions=functions, slicers=slicers, evaluator=evaluator)
 
     def _validate_table_name(self, table_name: str) -> bool:
         """ Checks whether the table name contains invalid characters or keywords"""

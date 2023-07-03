@@ -41,10 +41,6 @@ def _signed_float():
     )
 
 
-def _number():
-    return pp.common.integer
-
-
 def _string_list():
     return pp.delimitedList(
         _quoted_string()

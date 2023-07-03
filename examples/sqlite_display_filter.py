@@ -20,10 +20,12 @@ import os.path
 import sqlite3
 import sys
 import traceback
-from typing import List
+from typing import List, Dict, Callable
 
 from pydictdisplayfilter.display_filters import SQLDisplayFilter
+from pydictdisplayfilter.evaluators import Evaluator
 from pydictdisplayfilter.helpers import DisplayFilterShell, Table, TableError
+from pydictdisplayfilter.slicers import BasicSlicer
 
 
 class TableNotFoundError(TableError):
@@ -41,10 +43,23 @@ class NoTableSelectedError(TableError):
 class SQLiteTable(Table):
     """ Data store with filter capabilities and pretty table printout. """
 
-    def __init__(self, database_file: str):
+    def __init__(self,
+                 database_file: str,
+                 table_name: str = None,
+                 column_names: List[str] = None,
+                 functions: Dict[str, Callable] = None,
+                 slicers: List[BasicSlicer] = None,
+                 evaluator: Evaluator = None):
         self._database_file = database_file
         self._connection = sqlite3.connect(database_file)
-        super().__init__(SQLDisplayFilter(self._connection))
+        super().__init__(
+            SQLDisplayFilter(
+                connection=self._connection,
+                table_name=table_name,
+                column_names=column_names,
+                functions=functions,
+                slicers=slicers,
+                evaluator=evaluator))
 
     def _table_exists(self, table_name: str) -> bool:
         """ Checks whether the specified table does exist. """
@@ -101,9 +116,22 @@ class SQLiteTable(Table):
 class SQLiteDisplayFilterShell(DisplayFilterShell):
     """ A little shell for querying a SQLite database using the display filter. """
 
-    def __init__(self, database_file: str):
+    def __init__(self,
+                 database_file: str,
+                 table_name: str = None,
+                 column_names: List[str] = None,
+                 functions: Dict[str, Callable] = None,
+                 slicers: List[BasicSlicer] = None,
+                 evaluator: Evaluator = None):
         """ Initializes the SQLiteDisplayFilterShell with a database file. """
-        super().__init__(SQLiteTable(database_file=database_file))
+        super().__init__(
+            SQLiteTable(
+                database_file=database_file,
+                table_name=table_name,
+                column_names=column_names,
+                functions=functions,
+                slicers=slicers,
+                evaluator=evaluator))
 
     def do_tables(self, *args):
         """ Returns all tables which can be selected. """

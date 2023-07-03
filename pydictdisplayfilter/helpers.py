@@ -19,14 +19,33 @@ import logging
 import os
 import time
 import traceback
-from typing import List
+from collections import OrderedDict
+from itertools import chain
+from typing import List, Dict, Callable
 
 from pydictdisplayfilter.display_filters import BaseDisplayFilter, DictDisplayFilter
+from pydictdisplayfilter.evaluators import Evaluator
 from pydictdisplayfilter.exceptions import ParserError, EvaluationError
+from pydictdisplayfilter.slicers import BasicSlicer
 
 
 class TableError(Exception):
     pass
+
+
+class TableColumnSizeCalculator:
+
+    @staticmethod
+    def calculate(data_store: List[dict], fields: List) -> List[int]:
+        """ Calculates and returns the necessary size of each column in the data store. """
+        field_sizes = OrderedDict()
+        for field in fields:
+            field_sizes[field] = len(field)
+        for item in data_store:
+            for key in field_sizes.keys():
+                if key in item:
+                    field_sizes[key] = max(len(str(item[key])), field_sizes[key])
+        return list(field_sizes.values())
 
 
 class Table:
@@ -39,22 +58,18 @@ class Table:
         """ Creates a table including header from the data store. """
         if not data_store:
             return []
-        table = [self.fields()]
-        column_size = self._calculate_column_size(data_store)
+        fields = self.fields()
+        table = [fields]
+        column_size = self._calculate_column_size(data_store, fields)
         format_str = ' | '.join(["{{:<{}}}".format(i) for i in column_size])
         for item in data_store:
-            table.append(item.values())
-        column_size = self._calculate_column_size(data_store)
+            table.append([str(item[field]) if field in item else '' for field in fields])
         table.insert(1, ['-' * i for i in column_size]) # Separating line
         return [""] + [ format_str.format(*item) for item in table ]
 
-    def _calculate_column_size(self, data_store: List[dict]) -> List[int]:
+    def _calculate_column_size(self, data_store: List[dict], fields: List) -> List[int]:
         """ Calculates and returns the necessary size of each column in the data store. """
-        header = list(data_store[0].keys())
-        items = [list(item.values()) for item in data_store]
-        return [
-            max(len(str(item)) for item in column) for column in zip(*items + [header])
-        ]
+        return TableColumnSizeCalculator.calculate(data_store, fields)
 
     def _make_footer(self, items: List[dict], duration: float) -> List[str]:
         """ Creates a footer for the table which prints some statistics. """
@@ -70,7 +85,7 @@ class Table:
 
     def fields(self) -> List[str]:
         """ Returns the field names used in the data store. """
-        raise NotImplementedError()
+        return self._display_filter.field_names
 
     def filter(self, display_filter: str) -> str:
         """
@@ -177,22 +192,29 @@ class DisplayFilterShell(cmd.Cmd):
 class DictTable(Table):
     """ Data store with filter capabilities and pretty table printout. """
 
-    def __init__(self, data_store: List[dict]):
+    def __init__(self,
+                 data_store: List[dict],
+                 field_names: List[str] = None,
+                 functions: Dict[str, Callable] = None,
+                 slicers: List[BasicSlicer] = None,
+                 evaluator: Evaluator = None):
         """ Initializes the DictTable with a data store. """
-        self._data_store = data_store
-        super().__init__(DictDisplayFilter(data_store))
+        field_names = field_names or self._extract_field_names(data_store)
+        super().__init__(DictDisplayFilter(data_store, field_names, functions, slicers, evaluator))
 
-    def fields(self) -> List[str]:
-        """ Returns the field names used in the data store. """
-        if not self._data_store:
-            # No items in data store, so there are no fields to query either.
-            return list()
-        return list(self._data_store[0].keys())
+    def _extract_field_names(self, data_store: List[dict]) -> List[str]:
+        """ Extracts the field names from the given data store. """
+        return sorted(set(chain.from_iterable(row.keys() for row in data_store)))
 
 
 class DictDisplayFilterShell(DisplayFilterShell):
     """ A little shell for querying a list of dictionaries using the display filter. """
 
-    def __init__(self, data_store: List[dict]):
+    def __init__(self,
+                 data_store: List[dict],
+                 field_names: List[str] = None,
+                 functions: Dict[str, Callable] = None,
+                 slicers: List[BasicSlicer] = None,
+                 evaluator: Evaluator = None):
         """ Initializes the DictDisplayFilterShell with a data store. """
-        super().__init__(DictTable(data_store))
+        super().__init__(DictTable(data_store, field_names, functions, slicers, evaluator))

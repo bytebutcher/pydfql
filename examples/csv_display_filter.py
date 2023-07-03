@@ -51,7 +51,12 @@ if __name__ == '__main__':
 
     try:
         data_store = read_csv_file(csv_file)
-        DictDisplayFilterShell(data_store).cmdloop()
+        if not data_store or len(data_store) == 0:
+            field_names = list()
+        else:
+            # Extract field names from header.
+            field_names = list(data_store[0].keys())
+        DictDisplayFilterShell(data_store, field_names=field_names).cmdloop()
     except Exception as err:
         logger.error(str(err))
         traceback.print_exc()

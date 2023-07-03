@@ -89,7 +89,7 @@ if __name__ == '__main__':
 
     try:
         data_store = NmapXMLParser().parse(nmap_xml_file)
-        DictDisplayFilterShell(data_store).cmdloop()
+        DictDisplayFilterShell(data_store, field_names=["host", "port", "protocol", "status", "service"]).cmdloop()
     except Exception as err:
         logger.error(str(err))
         traceback.print_exc()

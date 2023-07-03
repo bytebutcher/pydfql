@@ -265,7 +265,4 @@ class TestDictDisplayFilter(unittest.TestCase):
     ])
     def test_mixed_data_display_filter_returns_correct_number_of_items(self, display_filter, no_items):
         items = list(DictDisplayFilter(self.mixed_data).filter(display_filter))
-        if len(items) != no_items:
-            list_difference = [item for item in self.mixed_data if item not in items]
-            print(list_difference)
         self.assertEqual(len(items), no_items)

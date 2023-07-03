@@ -115,10 +115,10 @@ python3 examples/sqlite_display_filter.py data/example.sqlite
 ```
 ```
 > tables
-People
+Actors
 ```
 ```
-> use People
+> use Actors
 Database changed
 ```
 ```
