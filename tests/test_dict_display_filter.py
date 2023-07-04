@@ -19,6 +19,7 @@ import unittest
 from parameterized import parameterized
 
 from pydictdisplayfilter.display_filters import DictDisplayFilter
+from pydictdisplayfilter.exceptions import ParserError
 
 
 class TestDictDisplayFilter(unittest.TestCase):
@@ -266,3 +267,54 @@ class TestDictDisplayFilter(unittest.TestCase):
     def test_mixed_data_display_filter_returns_correct_number_of_items(self, display_filter, no_items):
         items = list(DictDisplayFilter(self.mixed_data).filter(display_filter))
         self.assertEqual(len(items), no_items)
+
+    @parameterized.expand([
+        # Fields
+        ["lower(value) == foobar", 2],
+        ["upper(value) == FOOBAR", 2],
+        ["upper(value) ~= FOO", 3],
+        ["lower(value) ~= foo", 3],
+        ["len(value) == 6", 2],
+        ["len(value) == 3", 2],
+    ])
+    def test_functions_default(self, display_filter, no_items):
+        data = [{'value': 'foobar'}, {'value': 'FOOBAR'}, {'value': 'FOO'}, {'value': 'BAR'}]
+        items = list(DictDisplayFilter(data).filter(display_filter))
+        self.assertEqual(len(items), no_items)
+
+    @parameterized.expand([
+        # Fields
+        ["ltrim(value) == foobar"],
+        ["rtrim(value) == foobar"],
+        ["trim(value) == foobar"],
+    ])
+    def test_functions_undefined_raises_parser_error(self, display_filter):
+        data = [{'value': 'foobar'}, {'value': 'FOOBAR'}, {'value': 'FOO'}, {'value': 'BAR'}]
+        self.assertRaises(ParserError, lambda: list(DictDisplayFilter(data).filter(display_filter)))
+
+    @parameterized.expand([
+        # Fields
+        ["value == foobar", 0],
+        ["ltrim(value) == foobar", 1],
+        ["rtrim(value) == foobar", 1],
+        ["trim(value) == foobar", 3]
+    ])
+    def test_functions_custom(self, display_filter, no_items):
+        data = [{'value': ' foobar'}, {'value': ' foobar '}, {'value': 'foobar '}]
+        functions = {
+            'ltrim': lambda v: v.lstrip(),
+            'rtrim': lambda v: v.rstrip(),
+            'trim': lambda v: v.strip()
+        }
+        items = list(DictDisplayFilter(data, functions=functions).filter(display_filter))
+        self.assertEqual(len(items), no_items)
+
+    @parameterized.expand([
+        # Fields
+        ["lower(value) == foobar"],
+        ["upper(value) == FOOBAR"],
+        ["len(value) == 6"],
+    ])
+    def test_functions_none(self, display_filter):
+        data = [{'value': 'foobar'}, {'value': 'FOOBAR'}, {'value': 'FOO'}, {'value': 'BAR'}]
+        self.assertRaises(ParserError, lambda: list(DictDisplayFilter(data, functions={}).filter(display_filter)))

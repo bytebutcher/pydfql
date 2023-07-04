@@ -45,16 +45,15 @@ class BaseDisplayFilter(ABC):
         :param evaluator: The evaluator used to evaluate the expressions. If no evaluator is specified the
                           DefaultEvaluator is used.
         """
-        functions = functions if functions else {
+        self._slicer_factory = SlicerFactory(slicers)
+        self._evaluator = evaluator if evaluator else DefaultEvaluator()
+        self._functions = functions if functions is not None else {
             "len": lambda value: len(value),
             "lower": lambda value: value.lower(),
             "upper": lambda value: value.upper()
         }
-        self._slicer_factory = SlicerFactory(slicers)
-        self._evaluator = evaluator if evaluator else DefaultEvaluator()
-        self._functions = functions or []
-        self._field_names = field_names or []
-        self._display_filter_parser = DisplayFilterParser(field_names=field_names, functions=functions)
+        self._field_names = field_names if field_names is not None else []
+        self._display_filter_parser = DisplayFilterParser(field_names=self._field_names, functions=self._functions)
 
     def _get_item_value(self, expression, item) -> str:
         """
