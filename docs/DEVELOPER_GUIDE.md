@@ -1,8 +1,7 @@
 <p align="center">
     <img src="https://github.com/bytebutcher/python-dict-display-filter/raw/main/images/python_dict_display_filter_logo.png" alt="python_dict_display_filter Logo"/>
 </p>
-<h1 align="center" style="margin-top: 0px;">Python Dictionary Display Filter</h1>
-<h1 align="center" style="margin-top: 0px;">Developer Guide</h1>
+<h1 align="center" style="margin-top: 0px;">Python Dictionary Display Filter</br>Developer Guide</h1>
 <br>
 
 ## Customizing Display Filters

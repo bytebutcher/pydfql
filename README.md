@@ -12,9 +12,8 @@
 </div>
 <br>
 
-A Wireshark-like display filter for Python dictionaries. This tool allows you to easily filter, analyze, and 
-manipulate data in Python dictionaries. It offers a range of features including comparison operators, 
-combining operators, membership operators, and more. 
+A Wireshark-like display filter for Python dictionaries and various other data 
+sources, including objects, lists, and SQL databases. 
 
 ## Table of Contents
 1. [Quick Start](#quick-start)
@@ -24,31 +23,60 @@ combining operators, membership operators, and more.
 
 ## Quick Start
 
-Here's a simple example to get you started. First, install the package:
+To quickly get started with the python-dictionary-display-filter, follow the steps below:
+
+### Installation
+First, install the package using pip:
 
 ```commandline
 pip3 install python-dict-display-filter
 ```
 
-Then, use it to filter a list of dictionaries:
-```
+### Initialization
+Next, import the necessary module and initialize the ```DictDisplayFilter``` with a list of dictionaries:
+```python
 from pydictdisplayfilter import DictDisplayFilter
+
 actors = [
     {"name": ["Laurence", "Fishburne"], "age": {"born": "1961"}, "gender": "male"},
     {"name": ["Keanu", "Reeves"], "age": {"born": "1964"}, "gender": "male", "power": ["flight", "bullet-time"]},
     {"name": ["Joe", "Pantoliano"], "age": {"born": "1951"}, "gender": "male"},
     {"name": ["Carrie-Anne", "Moss"], "age": {"born": "1967"}, "gender": "female"}
 ]
+
 ddf = DictDisplayFilter(actors)
+```
 
-# This will filter the list to show only male actors born between 1960 and 1965 whose names end with 'e'
-filtered_actors = ddf.filter("gender == male and (age.born > 1960 and age.born < 1965) and name matches .*e$")
+### Filtering Data
+Once the ```DictDisplayFilter``` is initialized, you can start filtering the data using the 
+<a href="https://github.com/bytebutcher/python-dict-display-filter/blob/main/docs/USER_GUIDE.md#4-query-language">display filter query language</a>.
+For example, let's filter the actors whose birth year is after 1960:
+```python
+filter_query = "age.born > 1960"
+filtered_data = ddf.filter(filter_query)
+print(list(filtered_data))
+[
+    {"name": ["Laurence", "Fishburne"], "age": {"born": "1961"}, "gender": "male"},
+    {"name": ["Keanu", "Reeves"], "age": {"born": "1964"}, "gender": "male", "power": ["flight", "bullet-time"]},
+    {"name": ["Carrie-Anne", "Moss"], "age": {"born": "1967"}, "gender": "female"}
+]
+```
 
-print(list(filtered_actors))
+You can also use more complex queries to filter the data. 
+For example, let's filter male actors born between 1960 and 1964 whose names end with "e":
+
+```python
+filter_query = "gender == male and (age.born > 1960 and age.born < 1965) and name matches .*e$"
+filtered_data = ddf.filter(filter_query)
+print(list(filtered_data))
+```
+
+This will output the filtered data:
+```python
 [{'name': ['Laurence', 'Fishburne'], 'age': {'born': '1961'}, 'gender': 'male'}]
 ```
 
-For more details, please refer to the 
+For more details and advanced usage, please refer to the 
 <a href="https://github.com/bytebutcher/python-dict-display-filter/blob/main/docs/USER_GUIDE.md">User Guide</a>.
 
 ## Features
@@ -60,19 +88,20 @@ Python Dictionary Display Filter supports a wide range of features, including:
 * **Types:** ```Text```, ```Number```, ```Date & Time```, ```Ethernet-```, ```IPv4-```, ```IPv6-Address```
 * **Slicing:** ```Text```, ```Ethernet-```, ```IPv4-```, ```IPv6-Address```
 * **Functions:** ```upper```, ```lower```, ```len```
-* **Data Sources**: ```CSV```, ```Dictionaries```, ```JSON```, ```SQLite```
+* **Data Sources**: ```CSV```, ```Dictionaries```, ```JSON```, ```Objects```, ```SQLite```
 
 For a detailed description of the individual features check out the
 <a href="https://github.com/bytebutcher/python-dict-display-filter/blob/main/docs/USER_GUIDE.md">User Guide</a>.
 
 ## Examples 
 
-For detailed examples of how the display filter can be utilized, please refer to the following:
+For detailed examples of how the display filter can be utilized, please refer to the following sections of the 
+<a href="https://github.com/bytebutcher/python-dict-display-filter/blob/main/docs/USER_GUIDE.md">User Guide</a>:
 
-* [CSV Display Filter](https://github.com/bytebutcher/python-dict-display-filter/blob/main/docs/EXAMPLES.md#csv-display-filter)
-* [JSON Display Filter](https://github.com/bytebutcher/python-dict-display-filter/blob/main/docs/EXAMPLES.md#json-display-filter)
-* [SQLite Display Filter](https://github.com/bytebutcher/python-dict-display-filter/blob/main/docs/EXAMPLES.md#sqlite-display-filter)
-* [Nmap Display Filter](https://github.com/bytebutcher/python-dict-display-filter/blob/main/docs/EXAMPLES.md#nmap-display-filter)
+* [CSV Display Filter](https://github.com/bytebutcher/python-dict-display-filter/blob/main/docs/USER_GUIDE.md#51-csv-display-filter)
+* [JSON Display Filter](https://github.com/bytebutcher/python-dict-display-filter/blob/main/docs/USER_GUIDE.md#52-json-display-filter)
+* [SQLite Display Filter](https://github.com/bytebutcher/python-dict-display-filter/blob/main/docs/USER_GUIDE.md#53-sqlite-display-filter)
+* [Nmap Display Filter](https://github.com/bytebutcher/python-dict-display-filter/blob/main/docs/USER_GUIDE.md#54-nmap-display-filter)
 
 ## Acknowledgements
 
