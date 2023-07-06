@@ -122,7 +122,7 @@ class BaseDisplayFilter(ABC):
 
 
 class DictDisplayFilter(BaseDisplayFilter):
-    """ Allows to filter a dictionary using a display filter. """
+    """ Allows to filter a list of dictionaries using a display filter. """
 
     def __init__(self,
                  data: List[dict],
@@ -138,7 +138,7 @@ class DictDisplayFilter(BaseDisplayFilter):
         self._data = data
 
     def filter(self, display_filter: str):
-        """ Filters the data using the display filter. """
+        """ Filters the dictionaries using the display filter. """
         expressions = self._display_filter_parser.parse(display_filter)
         yield from self._filter_data(self._data, expressions)
 
@@ -246,3 +246,33 @@ class SQLDisplayFilter(BaseDisplayFilter):
         expressions = self._display_filter_parser.parse(display_filter)
         table_data = self._get_table_data()
         yield from self._filter_data(table_data, expressions)
+
+
+class ObjectDisplayFilter(BaseDisplayFilter):
+    """ Allows to filter a list of objects using a display filter. """
+
+    def __init__(self,
+                 data: List[object],
+                 field_names: List[str] = None,
+                 functions: Dict[str, Callable] = None,
+                 slicers: List[BasicSlicer] = None,
+                 evaluator: Evaluator = None):
+        """
+        Initializes the DictDisplayFilter.
+        :param data: A list of dictionaries to filter on.
+        """
+        super().__init__(field_names=field_names, functions=functions, slicers=slicers, evaluator=evaluator)
+        self._data = data
+
+    def _filter_data(self, data: List[object], expressions: List[Union[Expression, str]]) -> List:
+        if expressions:
+            for item in data:
+                if self._evaluate_expressions(expressions, item.__dict__):
+                    yield item
+        else:
+            yield from data
+
+    def filter(self, display_filter: str):
+        """ Filters the objects using the display filter. """
+        expressions = self._display_filter_parser.parse(display_filter)
+        yield from self._filter_data(self._data, expressions)
