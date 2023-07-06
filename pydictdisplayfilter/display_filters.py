@@ -91,9 +91,12 @@ class BaseDisplayFilter(ABC):
             raise EvaluationError(err)
 
     def _filter_data(self, data: List, expressions: List[Union[Expression, str]]) -> List:
-        for item in data:
-            if self._evaluate_expressions(expressions, item):
-                yield item
+        if expressions:
+            for item in data:
+                if self._evaluate_expressions(expressions, item):
+                    yield item
+        else:
+            yield from data
 
     @property
     def field_names(self) -> List[str]:

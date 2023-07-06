@@ -90,6 +90,15 @@ class TestDictDisplayFilter(unittest.TestCase):
     ]
 
     @parameterized.expand([
+        [None],
+        [''],
+        [' ']
+    ])
+    def test_empty_display_filter_return_all_items(self, display_filter):
+        actual_result = list(DictDisplayFilter(self.data).filter(display_filter))
+        self.assertEqual(len(actual_result), len(self.data))
+
+    @parameterized.expand([
         # Field existence
         ['name', 4],
         ['power', 1],

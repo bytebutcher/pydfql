@@ -137,6 +137,8 @@ class DisplayFilterParser:
         :raises ParserError, when the given display filter could not be parsed correctly.
         """
         try:
+            if not format or not format.strip():
+                return []
             return self._display_filter_format.parseString(format, parseAll=True).asList()
         except Exception:
             # This error indicates that there is something wrong with the given display filter.

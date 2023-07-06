@@ -27,6 +27,14 @@ class TestFilterStringParser(TestCase):
     generic_display_filter_parser = DisplayFilterParser()
 
     @parameterized.expand([
+        [None],
+        [''],
+        [' ']
+    ])
+    def test_empty_query_returns_empty_list(self, display_filter):
+        self.assertEqual(self.display_filter_parser.parse(display_filter), [])
+
+    @parameterized.expand([
         ['127.0.0.1'],
         ['127.0.0.1/24'],
         ['127.0.0.?'],

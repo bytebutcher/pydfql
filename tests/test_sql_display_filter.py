@@ -83,6 +83,14 @@ class TestSQLDisplayFilter(unittest.TestCase):
             connection.execute(insert_table_data_command, data)
 
     @parameterized.expand([
+        [None],
+        [''],
+        [' ']
+    ])
+    def test_empty_display_filter_returns_all_items(self, display_filter):
+        self.assertEqual(len(list(SQLDisplayFilter(self._connection, 'data').filter(display_filter))), len(self.data))
+
+    @parameterized.expand([
         # Field existence
         ['name', 4],
         ['power', 1],
