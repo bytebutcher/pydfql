@@ -69,9 +69,9 @@ filter_query = "age.born > 1960"
 filtered_data = df.filter(filter_query)
 print(list(filtered_data))
 [
-    Actor(name=["Laurence", "Fishburne"], age={"born": "1961"}, gender="male"),
-    Actor(name=["Keanu", "Reeves"], age={"born": "1964"}, gender="male"),
-    Actor(name=["Carrie-Anne", "Moss"], age={"born": "1967"}, gender="female")
+    Actor(name=['Laurence', 'Fishburne'], age={'born': '1961'}, gender='male'),
+    Actor(name=['Keanu', 'Reeves'], age={'born': '1964'}, gender='male'),
+    Actor(name=['Carrie-Anne', 'Moss'], age={'born': '1967'}, gender='female')
 ]
 ```
 
@@ -86,7 +86,7 @@ print(list(filtered_data))
 
 This will output the filtered data:
 ```python
-[{'name': ['Laurence', 'Fishburne'], 'age': {'born': '1961'}, 'gender': 'male'}]
+[Actor(name=['Laurence', 'Fishburne'], age={'born': '1961'}, gender='male')]
 ```
 
 Overall, PyDFQL supports a wide range of features, including:
