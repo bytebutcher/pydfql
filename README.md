@@ -107,8 +107,8 @@ For detailed examples of how the display filter can be utilized, please refer to
 
 * [CSV Display Filter](https://github.com/bytebutcher/pydfql/blob/main/docs/USER_GUIDE.md#51-csv-display-filter)
 * [JSON Display Filter](https://github.com/bytebutcher/pydfql/blob/main/docs/USER_GUIDE.md#52-json-display-filter)
-* [SQLite Display Filter](https://github.com/bytebutcher/pydfql/blob/main/docs/USER_GUIDE.md#53-sqlite-display-filter)
-* [Nmap Display Filter](https://github.com/bytebutcher/pydfql/blob/main/docs/USER_GUIDE.md#54-nmap-display-filter)
+* [Nmap Display Filter](https://github.com/bytebutcher/pydfql/blob/main/docs/USER_GUIDE.md#53-nmap-display-filter)
+* [SQLite Display Filter](https://github.com/bytebutcher/pydfql/blob/main/docs/USER_GUIDE.md#54-sqlite-display-filter)
 
 ## Acknowledgements
 
