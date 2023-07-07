@@ -90,7 +90,7 @@ This will output the filtered data:
 ```
 
 Overall, PyDFQL supports a wide range of features, including:
-* **Data Types**: ```Dictionaries```, ```Lists```, ```Objects```, ```SQL```
+* **Data Sources**: ```Dictionaries```, ```Lists```, ```Objects```, ```SQL```
 * **Comparison Operators:** ```==```, ```!=```, ```<=```, ```<```, ```>=```, ```>```, ```~=```, ```~```, ```&```
 * **Combining Operators:** ```and```, ```or```, ```xor```, ```not``` 
 * **Membership Operators:** ```in```
