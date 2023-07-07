@@ -1,59 +1,71 @@
 <p align="center">
-    <img src="https://github.com/bytebutcher/python-dict-display-filter/raw/main/images/python_dict_display_filter_logo.png" alt="python_dict_display_filter Logo"/>
+    <img src="https://github.com/bytebutcher/pydfql/raw/main/images/pydfql_logo.png" alt="pydfql Logo"/>
 </p>
-<h1 align="center" style="margin-top: 0px;">Python Dictionary Display Filter</h1>
+<h1 align="center" style="margin-top: 0px;">Python Display Filter Query Language</h1>
 <div align="center">
 
 ![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)
-![PyPI](https://img.shields.io/pypi/v/python-dict-display-filter)
-![GitHub](https://img.shields.io/github/license/bytebutcher/python-dict-display-filter)
-![Build Status](https://img.shields.io/travis/com/bytebutcher/python-dict-display-filter)
-![Coverage](https://img.shields.io/codecov/c/github/bytebutcher/python-dict-display-filter)
+![PyPI](https://img.shields.io/pypi/v/pydfql)
+![GitHub](https://img.shields.io/github/license/bytebutcher/pydfql)
+![Build Status](https://img.shields.io/travis/com/bytebutcher/pydfql)
+![Coverage](https://img.shields.io/codecov/c/github/bytebutcher/pydfql)
 </div>
 <br>
 
-A Wireshark-like display filter for Python dictionaries and various other data 
-sources, including objects, lists, and SQL databases. 
+A Wireshark-like display filter various data formats, including Python dictionaries, lists, objects, and SQL databases. 
 
 ## Table of Contents
 1. [Quick Start](#quick-start)
-2. [Features](#features)
-3. [Examples](#examples)
-4. [Acknowledgements](#acknowledgements)
+
+    1.1 [Installation](#installation)
+
+    1.2 [Initialization](#initialization)
+
+    1.3 [Filtering Data](#filtering-data)
+
+2. [Examples](#examples)
+3. [Acknowledgements](#acknowledgements)
 
 ## Quick Start
 
-To quickly get started with the python-dictionary-display-filter, follow the steps below:
+To quickly get started follow the steps below:
 
 ### Installation
 First, install the package using pip:
 
 ```commandline
-pip3 install python-dict-display-filter
+pip3 install pydfql
 ```
 
 ### Initialization
-Next, import the necessary module and initialize the ```DictDisplayFilter``` with a list of dictionaries:
+Next, import the necessary module and initialize the appropriate display filter with some data.
+In the example below we are initializing the ```ObjectDisplayFilter``` with a list of objects:
 ```python
-from pydictdisplayfilter import DictDisplayFilter
+from pydfql import ObjectDisplayFilter
+
+class Actor:
+    def __init__(self, name, age, gender):
+        self.name = name
+        self.age = age
+        self.gender = gender
 
 actors = [
-    {"name": ["Laurence", "Fishburne"], "age": {"born": "1961"}, "gender": "male"},
-    {"name": ["Keanu", "Reeves"], "age": {"born": "1964"}, "gender": "male", "power": ["flight", "bullet-time"]},
-    {"name": ["Joe", "Pantoliano"], "age": {"born": "1951"}, "gender": "male"},
-    {"name": ["Carrie-Anne", "Moss"], "age": {"born": "1967"}, "gender": "female"}
+    Actor(["Laurence", "Fishburne"], {"born": "1961"}, "male"),
+    Actor(["Keanu", "Reeves"], {"born": "1964"}, "male"),
+    Actor(["Joe", "Pantoliano"], {"born": "1951"}, "male"),
+    Actor(["Carrie-Anne", "Moss"], {"born": "1967"}, "female")
 ]
 
-ddf = DictDisplayFilter(actors)
+df = ObjectDisplayFilter(actors)
 ```
 
 ### Filtering Data
-Once the ```DictDisplayFilter``` is initialized, you can start filtering the data using the 
-<a href="https://github.com/bytebutcher/python-dict-display-filter/blob/main/docs/USER_GUIDE.md#4-query-language">display filter query language</a>.
+Once the display filter is initialized, you can start filtering the data using the 
+<a href="https://github.com/bytebutcher/pydfql/blob/main/docs/USER_GUIDE.md#4-query-language">display filter query language</a>.
 For example, let's filter the actors whose birth year is after 1960:
 ```python
 filter_query = "age.born > 1960"
-filtered_data = ddf.filter(filter_query)
+filtered_data = df.filter(filter_query)
 print(list(filtered_data))
 [
     {"name": ["Laurence", "Fishburne"], "age": {"born": "1961"}, "gender": "male"},
@@ -67,7 +79,7 @@ For example, let's filter male actors born between 1960 and 1964 whose names end
 
 ```python
 filter_query = "gender == male and (age.born > 1960 and age.born < 1965) and name matches .*e$"
-filtered_data = ddf.filter(filter_query)
+filtered_data = df.filter(filter_query)
 print(list(filtered_data))
 ```
 
@@ -76,32 +88,26 @@ This will output the filtered data:
 [{'name': ['Laurence', 'Fishburne'], 'age': {'born': '1961'}, 'gender': 'male'}]
 ```
 
-For more details and advanced usage, please refer to the 
-<a href="https://github.com/bytebutcher/python-dict-display-filter/blob/main/docs/USER_GUIDE.md">User Guide</a>.
-
-## Features
-
-Python Dictionary Display Filter supports a wide range of features, including:
+Overall, PyDFQL supports a wide range of features, including:
+* **Data Types**: ```Dictionaries```, ```Lists```, ```Objects```, ```SQL```
 * **Comparison Operators:** ```==```, ```!=```, ```<=```, ```<```, ```>=```, ```>```, ```~=```, ```~```, ```&```
 * **Combining Operators:** ```and```, ```or```, ```xor```, ```not``` 
 * **Membership Operators:** ```in```
 * **Types:** ```Text```, ```Number```, ```Date & Time```, ```Ethernet-```, ```IPv4-```, ```IPv6-Address```
 * **Slicing:** ```Text```, ```Ethernet-```, ```IPv4-```, ```IPv6-Address```
 * **Functions:** ```upper```, ```lower```, ```len```
-* **Data Sources**: ```CSV```, ```Dictionaries```, ```JSON```, ```Objects```, ```SQLite```
 
 For a detailed description of the individual features check out the
-<a href="https://github.com/bytebutcher/python-dict-display-filter/blob/main/docs/USER_GUIDE.md">User Guide</a>.
+<a href="https://github.com/bytebutcher/pydfql/blob/main/docs/USER_GUIDE.md">User Guide</a>.
 
 ## Examples 
 
-For detailed examples of how the display filter can be utilized, please refer to the following sections of the 
-<a href="https://github.com/bytebutcher/python-dict-display-filter/blob/main/docs/USER_GUIDE.md">User Guide</a>:
+For detailed examples of how the display filter can be utilized, please refer to the following:
 
-* [CSV Display Filter](https://github.com/bytebutcher/python-dict-display-filter/blob/main/docs/USER_GUIDE.md#51-csv-display-filter)
-* [JSON Display Filter](https://github.com/bytebutcher/python-dict-display-filter/blob/main/docs/USER_GUIDE.md#52-json-display-filter)
-* [SQLite Display Filter](https://github.com/bytebutcher/python-dict-display-filter/blob/main/docs/USER_GUIDE.md#53-sqlite-display-filter)
-* [Nmap Display Filter](https://github.com/bytebutcher/python-dict-display-filter/blob/main/docs/USER_GUIDE.md#54-nmap-display-filter)
+* [CSV Display Filter](https://github.com/bytebutcher/pydfql/blob/main/docs/USER_GUIDE.md#51-csv-display-filter)
+* [JSON Display Filter](https://github.com/bytebutcher/pydfql/blob/main/docs/USER_GUIDE.md#52-json-display-filter)
+* [SQLite Display Filter](https://github.com/bytebutcher/pydfql/blob/main/docs/USER_GUIDE.md#53-sqlite-display-filter)
+* [Nmap Display Filter](https://github.com/bytebutcher/pydfql/blob/main/docs/USER_GUIDE.md#54-nmap-display-filter)
 
 ## Acknowledgements
 

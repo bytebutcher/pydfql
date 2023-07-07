@@ -1,4 +1,4 @@
-name: Workflow for Codecov python-dict-display-filter
+name: Workflow for Codecov pydfql
 on: [push, pull_request]
 jobs:
   run:

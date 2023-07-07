@@ -1,6 +1,6 @@
 # vim: ts=8:sts=8:sw=8:noexpandtab
 #
-# This file is part of python-dict-display-filter.
+# This file is part of pydfql.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@ from typing import List, Dict, Tuple
 
 from parameterized import parameterized
 
-from pydictdisplayfilter.display_filters import SQLDisplayFilter
+from pydfql.display_filters import SQLDisplayFilter
 
 
 class TestSQLDisplayFilter(unittest.TestCase):

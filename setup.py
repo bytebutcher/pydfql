@@ -10,12 +10,12 @@ README = (HERE / "README.md").read_text()
 
 # This call to setup() does all the work
 setup(
-    name="python-dict-display-filter",
-    version="1.2.0",
-    description="A Wireshark-like display filter for dictionaries.",
+    name="pydfql",
+    version="1.3.0",
+    description="A Wireshark-like display filter for querying data.",
     long_description=README,
     long_description_content_type="text/markdown",
-    url="https://github.com/bytebutcher/python-dict-display-filter",
+    url="https://github.com/bytebutcher/pyqfql",
     author="bytebutcher",
     author_email="thomas.engel.web@gmail.com",
     license="GPL-3.0",

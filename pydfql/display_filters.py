@@ -1,6 +1,6 @@
 # vim: ts=8:sts=8:sw=8:noexpandtab
 #
-# This file is part of python-dict-display-filter.
+# This file is part of pydfql.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,12 +19,12 @@ from abc import ABC, abstractmethod
 from sqlite3 import Connection
 from typing import List, Dict, Callable, Union
 
-from pydictdisplayfilter.evaluators import Evaluator, DefaultEvaluator
-from pydictdisplayfilter.exceptions import EvaluationError
-from pydictdisplayfilter.models import Expression
-from pydictdisplayfilter.factories import SlicerFactory
-from pydictdisplayfilter.parsers import DisplayFilterParser
-from pydictdisplayfilter.slicers import BasicSlicer
+from pydfql.evaluators import Evaluator, DefaultEvaluator
+from pydfql.exceptions import EvaluationError
+from pydfql.models import Expression
+from pydfql.factories import SlicerFactory
+from pydfql.parsers import DisplayFilterParser
+from pydfql.slicers import BasicSlicer
 
 
 class BaseDisplayFilter(ABC):

@@ -1,7 +1,7 @@
 <p align="center">
-    <img src="https://github.com/bytebutcher/python-dict-display-filter/raw/main/images/python_dict_display_filter_logo.png" alt="python_dict_display_filter Logo"/>
+    <img src="https://github.com/bytebutcher/pydfql/raw/main/images/pydfql_logo.png" alt="pydfql Logo"/>
 </p>
-<h1 align="center" style="margin-top: 0px;">Python Dictionary Display Filter</br>Developer Guide</h1>
+<h1 align="center" style="margin-top: 0px;">Python Display Filter Query Language</br>Developer Guide</h1>
 <br>
 
 ## Customizing Display Filters
@@ -19,7 +19,7 @@ parameters:
 
 ## Exceptions
 
-The ```python-dict-display-filter``` defines some custom exceptions which may be thrown during runtime:
+```pydfql``` defines some custom exceptions which may be thrown during runtime:
 
 | Exception              | Description                                                                                                                                                                                   |
 |------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -29,7 +29,7 @@ The ```python-dict-display-filter``` defines some custom exceptions which may be
 
 ## Helpers
 
-The ```python-dict-display-filter``` defines a set of helpers which may be used in standalone applications:
+```pydfql``` defines a set of helpers which may be used in standalone applications:
 
 | Helper Class                 | Description                                                                                                                     |
 |------------------------------|---------------------------------------------------------------------------------------------------------------------------------|

@@ -1,6 +1,6 @@
 # vim: ts=8:sts=8:sw=8:noexpandtab
 #
-# This file is part of python-dict-display-filter.
+# This file is part of pydfql.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import re
 from typing import List, Dict
-from pydictdisplayfilter.evaluators.common import FieldEvaluator, IPv4RangeEvaluator, ListEvaluator, NumberEvaluator, \
+from pydfql.evaluators.common import FieldEvaluator, IPv4RangeEvaluator, ListEvaluator, NumberEvaluator, \
     IntegerEvaluator, StringEvaluator, DateEvaluator, IPv4AddressEvaluator, IPv6AddressEvaluator, AbstractBasicEvaluator, \
     VersionStringEvaluator
 

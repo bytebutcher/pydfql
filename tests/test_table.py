@@ -1,6 +1,6 @@
 # vim: ts=8:sts=8:sw=8:noexpandtab
 #
-# This file is part of python-dict-display-filter.
+# This file is part of pydfql.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@ import os
 from unittest import TestCase, mock
 from unittest.mock import Mock, patch
 
-from pydictdisplayfilter.helpers import TableColumnSizeCalculator, Table, DictTable
+from pydfql.helpers import TableColumnSizeCalculator, Table, DictTable
 
 
 class TestTable(TestCase):

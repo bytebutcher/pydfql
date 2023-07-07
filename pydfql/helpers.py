@@ -1,6 +1,6 @@
 # vim: ts=8:sts=8:sw=8:noexpandtab
 #
-# This file is part of python-dict-display-filter.
+# This file is part of pydfql.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,10 +23,10 @@ from collections import OrderedDict
 from itertools import chain
 from typing import List, Dict, Callable
 
-from pydictdisplayfilter.display_filters import BaseDisplayFilter, DictDisplayFilter
-from pydictdisplayfilter.evaluators import Evaluator
-from pydictdisplayfilter.exceptions import ParserError, EvaluationError
-from pydictdisplayfilter.slicers import BasicSlicer
+from pydfql.display_filters import BaseDisplayFilter, DictDisplayFilter
+from pydfql.evaluators import Evaluator
+from pydfql.exceptions import ParserError, EvaluationError
+from pydfql.slicers import BasicSlicer
 
 
 class TableError(Exception):

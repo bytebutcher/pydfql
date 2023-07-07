@@ -1,6 +1,6 @@
 # vim: ts=8:sts=8:sw=8:noexpandtab
 #
-# This file is part of python-dict-display-filter.
+# This file is part of pydfql.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -22,10 +22,10 @@ import sys
 import traceback
 from typing import List, Set, Dict, Callable
 
-from pydictdisplayfilter import DictDisplayFilter
-from pydictdisplayfilter.evaluators import Evaluator
-from pydictdisplayfilter.helpers import Table, DisplayFilterShell
-from pydictdisplayfilter.slicers import BasicSlicer
+from pydfql import DictDisplayFilter
+from pydfql.evaluators import Evaluator
+from pydfql.helpers import Table, DisplayFilterShell
+from pydfql.slicers import BasicSlicer
 
 
 def read_json_file(json_file):

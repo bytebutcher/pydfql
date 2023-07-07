@@ -1,6 +1,6 @@
 # vim: ts=8:sts=8:sw=8:noexpandtab
 #
-# This file is part of python-dict-display-filter.
+# This file is part of pydfql.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,9 +16,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from parameterized import parameterized
 
-from pydictdisplayfilter.exceptions import ParserError
-from pydictdisplayfilter.models import Expression
-from pydictdisplayfilter.parsers import DisplayFilterParser
+from pydfql.exceptions import ParserError
+from pydfql.models import Expression
+from pydfql.parsers import DisplayFilterParser
 from tests import TestCase
 
 

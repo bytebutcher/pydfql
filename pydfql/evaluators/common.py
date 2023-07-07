@@ -1,6 +1,6 @@
 # vim: ts=8:sts=8:sw=8:noexpandtab
 #
-# This file is part of python-dict-display-filter.
+# This file is part of pydfql.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@ import pyparsing
 from dateutil.parser import parse as parse_date
 from packaging import version
 
-from pydictdisplayfilter.exceptions import EvaluationError
+from pydfql.exceptions import EvaluationError
 
 
 class AbstractEvaluator(ABC):
