@@ -60,6 +60,11 @@ actors = [
 df = ObjectDisplayFilter(actors)
 ```
 
+Note, that ```pydfql``` supports various other data sources like
+<a href="https://github.com/bytebutcher/pydfql/blob/main/docs/USER_GUIDE.md#32-dictdisplayfilter">Python dictionaries</a>,
+<a href="https://github.com/bytebutcher/pydfql/blob/main/docs/USER_GUIDE.md#33-listdisplayfilter">lists</a> and
+<a href="https://github.com/bytebutcher/pydfql/blob/main/docs/USER_GUIDE.md#34-sqldisplayfilter">SQL databases</a>.
+
 ### Filtering Data
 Once the display filter is initialized, you can start filtering the data using the 
 <a href="https://github.com/bytebutcher/pydfql/blob/main/docs/USER_GUIDE.md#4-query-language">display filter query language</a>.
@@ -90,7 +95,7 @@ This will output the filtered data:
 ```
 
 Overall, PyDFQL supports a wide range of features, including:
-* **Data Sources**: ```Dictionaries```, ```Lists```, ```Objects```, ```SQL```
+* **Data Sources**: ```Dictionaries```, ```Lists```, ```Objects```, ```SQL Databases```
 * **Comparison Operators:** ```==```, ```!=```, ```<=```, ```<```, ```>=```, ```>```, ```~=```, ```~```, ```&```
 * **Combining Operators:** ```and```, ```or```, ```xor```, ```not``` 
 * **Membership Operators:** ```in```

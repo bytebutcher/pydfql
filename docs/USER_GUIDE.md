@@ -11,12 +11,12 @@
 2. [Installation](#2-installation)
 
 3. [Usage](#3-usage)
+   
+   3.1 [ObjectDisplayFilter](#31-objectdisplayfilter)
 
-   3.1 [DictDisplayFilter](#31-dictdisplayfilter)
+   3.1 [DictDisplayFilter](#32-dictdisplayfilter)
    
-   3.2 [ListDisplayFilter](#32-objectdisplayfilter)
-   
-   3.3 [ObjectDisplayFilter](#33-listdisplayfilter)
+   3.2 [ListDisplayFilter](#33-listdisplayfilter)
    
    3.4 [SQLDisplayFilter](#34-sqldisplayfilter)
 
@@ -78,27 +78,8 @@ let's move on to the next section and explore how to quickly get started with it
 The ```pydfql``` library provides support for filtering data from various sources.
 This section will provide an overview of how ```pydfql``` can be used for different data sources.
 
-### 3.1 DictDisplayFilter
-The ```DictDisplayFilter``` allows to filter a list of dictionaries. 
 
-**Example:**
-
-```python
-from pydfql import DictDisplayFilter
-
-actors = [
-   {"name": ["Laurence", "Fishburne"], "age": {"born": "1961"}, "gender": "male"},
-   {"name": ["Keanu", "Reeves"], "age": {"born": "1964"}, "gender": "male", "power": ["flight", "bullet-time"]},
-   {"name": ["Joe", "Pantoliano"], "age": {"born": "1951"}, "gender": "male"},
-   {"name": ["Carrie-Anne", "Moss"], "age": {"born": "1967"}, "gender": "female"}
-]
-
-filter_query = "age.born > 1960 and age.born < 1965"
-filtered_data = DictDisplayFilter(actors).filter(filter_query)
-print(list(filtered_data))
-```
-
-### 3.2 ObjectDisplayFilter
+### 3.1 ObjectDisplayFilter
 The ```ObjectDisplayFilter``` enables filtering a list of objects.
 
 **Example:**
@@ -122,6 +103,26 @@ actors = [
 
 filter_query = "age.born > 1960"
 filtered_data = ObjectDisplayFilter(actors).filter(filter_query)
+print(list(filtered_data))
+```
+
+### 3.2 DictDisplayFilter
+The ```DictDisplayFilter``` allows to filter a list of dictionaries. 
+
+**Example:**
+
+```python
+from pydfql import DictDisplayFilter
+
+actors = [
+   {"name": ["Laurence", "Fishburne"], "age": {"born": "1961"}, "gender": "male"},
+   {"name": ["Keanu", "Reeves"], "age": {"born": "1964"}, "gender": "male", "power": ["flight", "bullet-time"]},
+   {"name": ["Joe", "Pantoliano"], "age": {"born": "1951"}, "gender": "male"},
+   {"name": ["Carrie-Anne", "Moss"], "age": {"born": "1967"}, "gender": "female"}
+]
+
+filter_query = "age.born > 1960 and age.born < 1965"
+filtered_data = DictDisplayFilter(actors).filter(filter_query)
 print(list(filtered_data))
 ```
 
