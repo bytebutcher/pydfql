@@ -23,8 +23,9 @@ A Wireshark-like display filter various data formats, including Python dictionar
 
     1.3 [Filtering Data](#filtering-data)
 
-2. [Examples](#examples)
-3. [Acknowledgements](#acknowledgements)
+2. [Features](#features)
+3. [Examples](#examples)
+4. [Acknowledgements](#acknowledgements)
 
 ## Quick Start
 
@@ -87,13 +88,12 @@ For example, let's filter male actors born between 1960 and 1964 whose names end
 filter_query = "gender == male and (age.born > 1960 and age.born < 1965) and name matches .*e$"
 filtered_data = df.filter(filter_query)
 print(list(filtered_data))
+[
+   Actor(name=['Laurence', 'Fishburne'], age={'born': '1961'}, gender='male')
+]
 ```
 
-This will output the filtered data:
-```python
-[Actor(name=['Laurence', 'Fishburne'], age={'born': '1961'}, gender='male')]
-```
-
+## Features
 Overall, PyDFQL supports a wide range of features, including:
 * **Data Sources**: ```Dictionaries```, ```Lists```, ```Objects```, ```SQL Databases```
 * **Comparison Operators:** ```==```, ```!=```, ```<=```, ```<```, ```>=```, ```>```, ```~=```, ```~```, ```&```
