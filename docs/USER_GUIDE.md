@@ -144,7 +144,7 @@ data = [
 
 filter_query = "age < 40"
 field_names = ["name", "actor", "age", "gender", "killed"]
-filtered_data = ListDisplayFilter(data).filter(filter_query)
+filtered_data = ListDisplayFilter(data, field_names).filter(filter_query)
 print(filtered_data)
 ```
 
@@ -166,6 +166,8 @@ filter_query = "age > 30"
 filtered_data = SQLDisplayFilter(connection, table_name).filter(filter_query)
 print(filtered_data)
 ```
+
+For a more advanced example checkout the [SQLite Display Filter example](#54-sqlite-display-filter).
 
 ## 4. Query Language
 
