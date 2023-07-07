@@ -12,7 +12,9 @@
 </div>
 <br>
 
-A Wireshark-like display filter various data formats, including Python dictionaries, lists, objects, and SQL databases. 
+**Python Display Filter Query Language (PyDFQL)** offers an intuitive and powerful query language, 
+similar to Wireshark's display filter, for working with various data structures and formats, 
+including Python dictionaries, lists, objects, and SQL databases.
 
 ## Table of Contents
 1. [Quick Start](#quick-start)
@@ -61,7 +63,7 @@ actors = [
 df = ObjectDisplayFilter(actors)
 ```
 
-Note, that ```pydfql``` supports various other data sources like
+Note, that PyDFQL supports various other data sources like
 <a href="https://github.com/bytebutcher/pydfql/blob/main/docs/USER_GUIDE.md#32-dictdisplayfilter">Python dictionaries</a>,
 <a href="https://github.com/bytebutcher/pydfql/blob/main/docs/USER_GUIDE.md#33-listdisplayfilter">lists</a> and
 <a href="https://github.com/bytebutcher/pydfql/blob/main/docs/USER_GUIDE.md#34-sqldisplayfilter">SQL databases</a>.
@@ -108,9 +110,11 @@ For a detailed description of the individual features check out the
 
 ## Examples 
 
-For detailed examples of how the display filter can be utilized, please refer to the following:
+PyDFQL can be applied in many contexts due to its flexible design. 
+It is well-suited for working with various data formats and can be easily integrated into your data analysis 
+workflow. Here are some examples where PyDFQL can be particularly useful:
 
-* [CSV Display Filter](https://github.com/bytebutcher/pydfql/blob/main/docs/USER_GUIDE.md#51-csv-display-filter)
+* [CSV Display Filter](https://github.com/bytebutcher/pydfql/blob/main/docs/USER_GUIDE.md#51-csv-display-filter) 
 * [JSON Display Filter](https://github.com/bytebutcher/pydfql/blob/main/docs/USER_GUIDE.md#52-json-display-filter)
 * [Nmap Display Filter](https://github.com/bytebutcher/pydfql/blob/main/docs/USER_GUIDE.md#53-nmap-display-filter)
 * [SQLite Display Filter](https://github.com/bytebutcher/pydfql/blob/main/docs/USER_GUIDE.md#54-sqlite-display-filter)
