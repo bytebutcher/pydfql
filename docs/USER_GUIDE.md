@@ -104,21 +104,20 @@ The ```ObjectDisplayFilter``` enables filtering a list of objects.
 **Example:**
 
 ```python
+from dataclasses import dataclass
 from pydfql import ObjectDisplayFilter
 
-
+@dataclass
 class Actor:
-   def __init__(self, name, age, gender):
-      self.name = name
-      self.age = age
-      self.gender = gender
-
+    name: list
+    age: dict
+    gender: str
 
 actors = [
-   Actor(["Laurence", "Fishburne"], {"born": "1961"}, "male"),
-   Actor(["Keanu", "Reeves"], {"born": "1964"}, "male"),
-   Actor(["Joe", "Pantoliano"], {"born": "1951"}, "male"),
-   Actor(["Carrie-Anne", "Moss"], {"born": "1967"}, "female")
+    Actor(["Laurence", "Fishburne"], {"born": "1961"}, "male"),
+    Actor(["Keanu", "Reeves"], {"born": "1964"}, "male"),
+    Actor(["Joe", "Pantoliano"], {"born": "1951"}, "male"),
+    Actor(["Carrie-Anne", "Moss"], {"born": "1967"}, "female")
 ]
 
 filter_query = "age.born > 1960"

@@ -41,13 +41,14 @@ pip3 install pydfql
 Next, import the necessary module and initialize the appropriate display filter with some data.
 In the example below we are initializing the ```ObjectDisplayFilter``` with a list of objects:
 ```python
+from dataclasses import dataclass
 from pydfql import ObjectDisplayFilter
 
+@dataclass
 class Actor:
-    def __init__(self, name, age, gender):
-        self.name = name
-        self.age = age
-        self.gender = gender
+    name: list
+    age: dict
+    gender: str
 
 actors = [
     Actor(["Laurence", "Fishburne"], {"born": "1961"}, "male"),
@@ -68,9 +69,9 @@ filter_query = "age.born > 1960"
 filtered_data = df.filter(filter_query)
 print(list(filtered_data))
 [
-    {"name": ["Laurence", "Fishburne"], "age": {"born": "1961"}, "gender": "male"},
-    {"name": ["Keanu", "Reeves"], "age": {"born": "1964"}, "gender": "male", "power": ["flight", "bullet-time"]},
-    {"name": ["Carrie-Anne", "Moss"], "age": {"born": "1967"}, "gender": "female"}
+    Actor(name=["Laurence", "Fishburne"], age={"born": "1961"}, gender="male"),
+    Actor(name=["Keanu", "Reeves"], age={"born": "1964"}, gender="male"),
+    Actor(name=["Carrie-Anne", "Moss"], age={"born": "1967"}, gender="female")
 ]
 ```
 
